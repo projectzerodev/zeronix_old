@@ -1,0 +1,7 @@
+[submodule "kernel/libs/limine"]
+	path = kernel/libs/limine
+	url = https://codeberg.org/Limine/limine-protocol
+[submodule "limine"]
+	path = limine
+	url = https://codeberg.org/Limine/Limine
+	branch = v9.x-binary
