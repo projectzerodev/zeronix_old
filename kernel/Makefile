@@ -34,6 +34,7 @@ override KCFLAGS += \
 
 override KCPPFLAGS += \
 	-I libs/limine/include \
+	-I libs/flanterm/src \
 	-MMD \
 	-MP
 
