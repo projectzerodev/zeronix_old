@@ -33,8 +33,12 @@ override KCFLAGS += \
 	-mcmodel=kernel
 
 override KCPPFLAGS += \
+	-I src \
 	-I libs/limine/include \
 	-I libs/flanterm/src \
+	-I libs/printf \
+	-D PRINTF_DISABLE_SUPPORT_FLOAT \
+	-D PRINTF_DISABLE_SUPPORT_EXPONENTIAL \
 	-MMD \
 	-MP
 

@@ -1,3 +1,4 @@
+#include "core/stdio.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
 #include <flanterm.h>
@@ -36,7 +37,8 @@ void kmain(void) {
     }
 
     _term_init(framebuffer_request.response->framebuffers[0]);
-    _term_write("Hey!", sizeof("Hey!"));
+
+    kprintf("Welcome to Zeroniz!\n");
 
     halt_loop();
 }
