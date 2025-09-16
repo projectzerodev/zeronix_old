@@ -1,0 +1,7 @@
+ovmf/
+
+*.log
+*.iso
+
+compile_commands.json
+.cache
