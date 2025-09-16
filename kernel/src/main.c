@@ -1,4 +1,7 @@
+#include "graphics/terminal.h"
 #include "hal/cpu.h"
+#include <flanterm.h>
+#include <flanterm_backends/fb.h>
 #include <limine.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -32,13 +35,8 @@ void kmain(void) {
         halt_loop();
     }
 
-    struct limine_framebuffer *framebuffer =
-        framebuffer_request.response->framebuffers[0];
-
-    for (size_t i = 0; i < 100; i++) {
-        volatile uint32_t *fb_ptr                = framebuffer->address;
-        fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
-    }
+    _term_init(framebuffer_request.response->framebuffers[0]);
+    _term_write("Hey!", sizeof("Hey!"));
 
     halt_loop();
 }
