@@ -48,7 +48,11 @@ override KLDFLAGS += \
 	-z max-page-size=0x1000 \
 	-T linker.lds
 
-override CFILES := $(shell cd src && find -L * -type f -name '*.c' | LC_ALL=C sort)
+
+override SRC_CFILES  := $(shell cd src && find -L * -type f -name '*.c' | LC_ALL=C sort)
+override LIB_CFILES  := $(shell cd libs && find -L * -type f -name '*.c' | LC_ALL=C sort)
+
+override CFILES := $(addprefix src/,$(SRC_CFILES)) $(addprefix libs/,$(LIB_CFILES))
 override ASFILES := $(shell cd src && find -L * -type f -name '*.S' | LC_ALL=C sort)
 override NASMFILES := $(shell cd src && find -L * -type f -name '*.asm' | LC_ALL=C sort)
 override OBJ := $(addprefix obj/,$(CFILES:.c=.c.o) $(ASFILES:.S=.S.o) $(NASMFILES:.asm=.asm.o))
@@ -63,7 +67,7 @@ bin/$(OUTPUT): linker.lds $(OBJ)
 # Makes sure that .c files are getting recompiled if any files included change
 -include $(HEADER_DEPS)
 
-obj/%.c.o: src/%.c
+obj/%.c.o: %.c
 	mkdir -p "$$(dirname $@)"
 	$(KCC) $(KCFLAGS) $(KCPPFLAGS) -c $< -o $@
 
