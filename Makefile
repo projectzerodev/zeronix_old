@@ -5,7 +5,7 @@ include tools/utils.mk
 $(call USER_VARIABLE, KARCH, x86_64)
 $(call USER_VARIABLE, QEMUFLAGS, -m 128M -M smm=off -serial stdio -d int -D qemu.log)
 
-override OUTPUT := hexium.iso
+override OUTPUT := zeronix.iso
 
 override XORRISO_FLAGS += \
 	-as mkisofs -b boot/limine/limine-bios-cd.bin				\
