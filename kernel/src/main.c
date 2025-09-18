@@ -1,6 +1,6 @@
-#include "core/stdio.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
+#include "utils/log.h"
 #include <flanterm.h>
 #include <flanterm_backends/fb.h>
 #include <limine.h>
@@ -38,7 +38,7 @@ void kmain(void) {
 
     _term_init(framebuffer_request.response->framebuffers[0]);
 
-    kprintf("Welcome to Zeroniz!\n");
+    log(INFO, "Welcome to Zeroniz!");
 
     halt_loop();
 }

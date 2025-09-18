@@ -19,13 +19,26 @@ void _putchar(char character) {
 }
 
 int kprintf(const char *format, ...) {
-    (void)format;
     char buffer[1024];
     va_list args;
 
     va_start(args);
     int length = npf_vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
+
+    if (length < 0 || length >= (int)sizeof(buffer)) {
+        return -1;
+    }
+
+    _term_write(buffer, length);
+
+    return length;
+}
+
+int kvprintf(const char *format, va_list args) {
+    char buffer[1024];
+
+    int length = npf_vsnprintf(buffer, sizeof(buffer), format, args);
 
     if (length < 0 || length >= (int)sizeof(buffer)) {
         return -1;
