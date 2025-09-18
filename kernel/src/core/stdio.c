@@ -14,10 +14,6 @@
 #define NANOPRINTF_IMPLEMENTATION
 #include <nanoprintf.h>
 
-void _putchar(char character) {
-    _term_write(&character, sizeof(char));
-}
-
 int kprintf(const char *format, ...) {
     char buffer[1024];
     va_list args;
