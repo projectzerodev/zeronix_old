@@ -38,7 +38,7 @@ void kmain(void) {
 
     _term_init(framebuffer_request.response->framebuffers[0]);
 
-    log(INFO, "Welcome to Zeroniz!");
+    info("Welcome to Zeroniz!");
 
     halt_loop();
 }
