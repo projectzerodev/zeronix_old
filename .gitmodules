@@ -5,3 +5,9 @@
 	path = limine
 	url = https://codeberg.org/Limine/Limine
 	branch = v9.x-binary
+[submodule "kernel/libs/flanterm"]
+	path = kernel/libs/flanterm
+	url = https://codeberg.org/mintsuki/flanterm.git
+[submodule "kernel/libs/nanoprintf"]
+	path = kernel/libs/nanoprintf
+	url = https://codeberg.org/zerodev/nanoprintf.git

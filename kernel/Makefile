@@ -33,7 +33,10 @@ override KCFLAGS += \
 	-mcmodel=kernel
 
 override KCPPFLAGS += \
+	-I src \
+	-I libs/flanterm/src \
 	-I libs/limine/include \
+	-I libs/nanoprintf \
 	-MMD \
 	-MP
 
