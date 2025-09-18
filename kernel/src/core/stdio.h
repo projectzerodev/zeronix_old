@@ -1,3 +1,3 @@
 #pragma once
 
-void kprintf(const char *format, ...);
+int kprintf(const char *format, ...);

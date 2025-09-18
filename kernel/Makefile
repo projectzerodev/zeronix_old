@@ -34,9 +34,9 @@ override KCFLAGS += \
 
 override KCPPFLAGS += \
 	-I src \
-	-I libs/limine/include \
 	-I libs/flanterm/src \
-	-I libs/printf \
+	-I libs/limine/include \
+	-I libs/nanoprintf \
 	-D PRINTF_DISABLE_SUPPORT_FLOAT \
 	-D PRINTF_DISABLE_SUPPORT_EXPONENTIAL \
 	-MMD \
