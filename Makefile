@@ -45,6 +45,10 @@ run: ovmf disk
 		-cdrom $(OUTPUT) \
 		$(QEMUFLAGS)
 
+menuconfig:
+	kconfig-mconf Kconfig
+	./tools/kconfig.sh
+
 bear:
 	bear -- make
 	$(MAKE) clean

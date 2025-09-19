@@ -5,3 +5,4 @@ ovmf/
 
 compile_commands.json
 .cache
+.config*

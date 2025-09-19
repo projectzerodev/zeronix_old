@@ -1,5 +1,7 @@
+#include "core/stdio.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
+#include "utils/autoconf.h"
 #include "utils/log.h"
 #include <flanterm.h>
 #include <flanterm_backends/fb.h>
@@ -37,6 +39,17 @@ void kmain(void) {
     }
 
     _term_init(framebuffer_request.response->framebuffers[0]);
+    info("Initialized terminal using framebuffer 0");
+
+#ifdef FB_DEBUG
+    for (uint64_t current_fb = 0;
+         framebuffer_request.response->framebuffer_count > current_fb;
+         current_fb++) {
+        trace("Framebuffer %i stats:", current_fb);
+        kprintf("      address: 0x%llx\n",
+                framebuffer_request.response->framebuffers[0]->address);
+    }
+#endif
 
     info("Welcome to Zeronix!");
 

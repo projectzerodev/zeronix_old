@@ -1,0 +1,11 @@
+mainmenu "Zeronix Kernel"
+
+menu "Debugging"
+
+config ENABLE_FB_DEBUG
+    bool "Enable framebuffer debugging"
+    default n
+    help
+        Enables detailed framebuffer tracing (minimal performance impact)
+
+endmenu # Debugging
