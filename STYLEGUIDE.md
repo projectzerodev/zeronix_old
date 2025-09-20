@@ -1,5 +1,16 @@
 # Zeronix Styleguide
 
+## Library Headers
+
+Any library headers that you include should be listed in alphabetical order, as in:
+
+```c
+#include <stdio.h>
+#include <string.h>
+```
+
+This makes it easier to see at a glance, particularly in a long list, whether you have included a header.
+
 ## Pointers
 
 When declaring a pointer, write the `*` next to the variable, as in:
