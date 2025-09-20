@@ -1,4 +1,4 @@
-; void __attribute__((cdecl)) amd64_gdt_load(gdt_ptr_t *pointer, uint16_t code_segment, uint16_t data_segment)
+; void amd64_gdt_load(gdt_ptr_t *pointer, uint16_t code_segment, uint16_t data_segment)
 global amd64_gdt_load
 amd64_gdt_load:
     lgdt [rdi]

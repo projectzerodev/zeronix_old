@@ -2,8 +2,7 @@
 #include "core/stdio.h"
 #include <stdarg.h>
 
-const char *level_tags[] = {"FATAL", "ERROR", "WARN ",
-                            "INFO ", "DEBUG", "TRACE"};
+const char *level_tags[] = {"FATAL", "ERROR", "WARN ", "INFO ", "DEBUG", "TRACE"};
 
 const char *level_colors[] = {"\x1b[1;31m", "\x1b[31m", "\x1b[93m",
                               "\x1b[32m",   "\x1b[36m", "\x1b[90m"};

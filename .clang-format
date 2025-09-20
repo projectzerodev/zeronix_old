@@ -13,4 +13,4 @@ AllowShortLambdasOnASingleLine: None
 IndentWidth: 4
 ContinuationIndentWidth: 4
 InsertNewlineAtEOF: true
-ColumnLimit: 120
+ColumnLimit: 100

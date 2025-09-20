@@ -1,12 +1,12 @@
 #include "string.h"
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 // GCC and Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
 
 void *memcpy(void *restrict dest, const void *restrict src, size_t n) {
-    uint8_t *restrict pdest = (uint8_t *restrict)dest;
+    uint8_t *restrict pdest      = (uint8_t *restrict)dest;
     const uint8_t *restrict psrc = (const uint8_t *restrict)src;
 
     for (size_t i = 0; i < n; i++) {
@@ -27,7 +27,7 @@ void *memset(void *s, int c, size_t n) {
 }
 
 void *memmove(void *dest, const void *src, size_t n) {
-    uint8_t *pdest = (uint8_t *)dest;
+    uint8_t *pdest      = (uint8_t *)dest;
     const uint8_t *psrc = (const uint8_t *)src;
 
     if (src > dest) {
@@ -36,7 +36,7 @@ void *memmove(void *dest, const void *src, size_t n) {
         }
     } else if (src < dest) {
         for (size_t i = n; i > 0; i--) {
-            pdest[i-1] = psrc[i-1];
+            pdest[i - 1] = psrc[i - 1];
         }
     }
 
