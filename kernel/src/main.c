@@ -20,13 +20,15 @@ __attribute__((used, section(".limine_requests_"
 
 __attribute__((used, section(".limine_requests_end"))) static volatile LIMINE_REQUESTS_END_MARKER;
 
-void kmain(void) {
-    if (LIMINE_BASE_REVISION_SUPPORTED == false) {
+void kmain(void)
+{
+    if (LIMINE_BASE_REVISION_SUPPORTED == false)
+    {
         halt_loop();
     }
 
-    if (framebuffer_request.response == NULL ||
-        framebuffer_request.response->framebuffer_count < 1) {
+    if (framebuffer_request.response == NULL || framebuffer_request.response->framebuffer_count < 1)
+    {
         halt_loop();
     }
 

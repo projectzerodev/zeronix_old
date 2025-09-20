@@ -14,3 +14,4 @@ IndentWidth: 4
 ContinuationIndentWidth: 4
 InsertNewlineAtEOF: true
 ColumnLimit: 100
+BreakBeforeBraces: Allman

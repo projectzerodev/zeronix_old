@@ -1,7 +1,8 @@
 #include "gdt.h"
 #include <stdint.h>
 
-typedef struct {
+typedef struct
+{
     uint16_t limit_low;
     uint16_t base_low;
     uint8_t base_middle;
@@ -10,12 +11,14 @@ typedef struct {
     uint8_t base_high;
 } __attribute__((packed)) gdt_entry_t;
 
-typedef struct {
+typedef struct
+{
     uint16_t limit; // sizeof(gdt) - 1
     gdt_entry_t *entry;
 } __attribute__((packed)) gdt_ptr_t;
 
-typedef enum {
+typedef enum
+{
     GDT_ACCESS_CODE_READABLE  = 0x02,
     GDT_ACCESS_DATA_WRITEABLE = 0x02,
 
@@ -36,7 +39,8 @@ typedef enum {
     GDT_ACCESS_PRESENT = 0x80,
 } GDT_ACCESS;
 
-typedef enum {
+typedef enum
+{
     GDT_FLAG_64BIT = 0x20,
     GDT_FLAG_32BIT = 0x40,
     GDT_FLAG_16BIT = 0x00,
@@ -81,6 +85,7 @@ gdt_ptr_t g_GDT_PTR = {sizeof(g_GDT) - 1, g_GDT};
 
 void amd64_gdt_load(gdt_ptr_t *pointer, uint16_t code_segment, uint16_t data_segment);
 
-void amd64_gdt_init() {
+void amd64_gdt_init()
+{
     amd64_gdt_load(&g_GDT_PTR, 0x8, 0x10);
 }

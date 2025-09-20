@@ -1,11 +1,14 @@
 #include "cpu.h"
 
-void halt() {
+void halt()
+{
     __asm__ __volatile__("hlt");
 }
 
-void halt_loop() {
-    for (;;) {
+void halt_loop()
+{
+    for (;;)
+    {
         halt();
     }
 }

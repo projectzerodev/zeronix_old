@@ -2,7 +2,8 @@
 
 #define COLOR_RESET "\033[0m"
 
-typedef enum {
+typedef enum
+{
     LOG_FATAL,
     LOG_ERROR,
     LOG_WARN,
