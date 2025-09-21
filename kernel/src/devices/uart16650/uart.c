@@ -1,4 +1,4 @@
-#include "devices/uart16550/uart.h"
+#include "devices/uart16650/uart.h"
 #include "hal/io.h"
 #include "core/spinlock.h"
 

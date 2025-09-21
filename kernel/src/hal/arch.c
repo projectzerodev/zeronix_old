@@ -2,7 +2,7 @@
 #include "arch/amd64/gdt/gdt.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
-#include "devices/uart16550/uart.h"
+#include "devices/uart16650/uart.h"
 #include "limine.h"
 #include "utils/log.h"
 
