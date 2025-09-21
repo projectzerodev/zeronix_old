@@ -64,7 +64,7 @@ typedef enum
      GDT_FLAGS_LIMIT_HI(limit, flags),                                                             \
      GDT_BASE_HIGH(base)}
 
-gdt_entry_t g_GDT[] = {
+gdt_entry_t gdt[] = {
     // Null descriptor
     GDT_ENTRY(0, 0, 0, 0),
 
@@ -81,11 +81,11 @@ gdt_entry_t g_GDT[] = {
               GDT_FLAG_GRANULARITY_4K),
 };
 
-gdtr_t g_GDT_PTR = {sizeof(g_GDT) - 1, g_GDT};
+gdtr_t gdtr = {sizeof(gdt) - 1, gdt};
 
 void amd64_gdt_load(gdtr_t *pointer, uint16_t code_segment, uint16_t data_segment);
 
 void amd64_gdt_init()
 {
-    amd64_gdt_load(&g_GDT_PTR, 0x8, 0x10);
+    amd64_gdt_load(&gdtr, 0x8, 0x10);
 }
