@@ -1,5 +1,5 @@
 #include "arch.h"
-#include "arch/amd64/gdt.h"
+#include "arch/amd64/gdt/gdt.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
 #include "limine.h"
