@@ -12,10 +12,10 @@ typedef enum
     LOG_TRACE,
 } log_level_t;
 
-void log(log_level_t level, const char *format, ...);
+void _log(log_level_t level, const char *format, ...);
 
-#define fatal(format, ...) log(LOG_FATAL, format, ##__VA_ARGS__)
-#define error(format, ...) log(LOG_ERROR, format, ##__VA_ARGS__)
-#define warn(format, ...)  log(LOG_WARN, format, ##__VA_ARGS__)
-#define info(format, ...)  log(LOG_INFO, format, ##__VA_ARGS__)
-#define trace(format, ...) log(LOG_TRACE, format, ##__VA_ARGS__)
+#define log_fatal(format, ...) _log(LOG_FATAL, format, ##__VA_ARGS__)
+#define log_error(format, ...) _log(LOG_ERROR, format, ##__VA_ARGS__)
+#define log_warn(format, ...)  _log(LOG_WARN, format, ##__VA_ARGS__)
+#define log_info(format, ...)  _log(LOG_INFO, format, ##__VA_ARGS__)
+#define log_trace(format, ...) _log(LOG_TRACE, format, ##__VA_ARGS__)

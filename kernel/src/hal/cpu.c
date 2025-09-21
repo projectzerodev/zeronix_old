@@ -2,7 +2,7 @@
 
 void halt()
 {
-    __asm__ __volatile__("hlt");
+    asm("hlt");
 }
 
 void halt_loop()
@@ -11,4 +11,14 @@ void halt_loop()
     {
         halt();
     }
+}
+
+void disable_interrupts()
+{
+    asm("cli");
+}
+
+void enable_interrupts()
+{
+    asm("sti");
 }
