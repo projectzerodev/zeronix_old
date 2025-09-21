@@ -62,3 +62,25 @@ Don't declare pointers on the same line as non-pointers, as in:
 ```c
 int *p, n;
 ```
+
+## Structures
+
+Declare a `struct` as a type as follows, with each curly brace on its own line and members indented therein, with the type's name also on its own line:
+
+```c
+typedef struct
+{
+    string name;
+    string dorm;
+} student;
+```
+
+If the `struct` contains as a member a pointer to another such `struct`, declare the `struct` as having a name identical to the type, without using underscores:
+
+```c
+typedef struct node
+{
+    int n;
+    struct node *next;
+} node;
+```
