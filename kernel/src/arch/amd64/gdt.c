@@ -15,7 +15,7 @@ typedef struct
 {
     uint16_t limit; // sizeof(gdt) - 1
     gdt_entry_t *entry;
-} __attribute__((packed)) gdt_ptr_t;
+} __attribute__((packed)) gdtr_t;
 
 typedef enum
 {
@@ -81,9 +81,9 @@ gdt_entry_t g_GDT[] = {
               GDT_FLAG_GRANULARITY_4K),
 };
 
-gdt_ptr_t g_GDT_PTR = {sizeof(g_GDT) - 1, g_GDT};
+gdtr_t g_GDT_PTR = {sizeof(g_GDT) - 1, g_GDT};
 
-void amd64_gdt_load(gdt_ptr_t *pointer, uint16_t code_segment, uint16_t data_segment);
+void amd64_gdt_load(gdtr_t *pointer, uint16_t code_segment, uint16_t data_segment);
 
 void amd64_gdt_init()
 {
