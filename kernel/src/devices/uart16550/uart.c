@@ -1,6 +1,8 @@
 #include "devices/uart16550/uart.h"
+#include "arch/amd64/io.h"
 #include "core/spinlock.h"
-#include "hal/io.h"
+
+// amd64-only uart 16550 implementation
 
 static uint16_t uart_base = UART_COM1_BASE;
 static spinlock_t uart_lock;

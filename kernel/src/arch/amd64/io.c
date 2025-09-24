@@ -1,4 +1,4 @@
-#include "hal/io.h"
+#include "io.h"
 
 uint8_t inb(uint16_t port)
 {
