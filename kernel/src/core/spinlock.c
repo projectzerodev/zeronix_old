@@ -5,7 +5,7 @@ void spinlock_init(spinlock_t *lock)
     atomic_flag_clear(lock);
 }
 
-void spinlock_aquire(spinlock_t *lock)
+void spinlock_acquire(spinlock_t *lock)
 {
     while (atomic_flag_test_and_set(lock))
     {
