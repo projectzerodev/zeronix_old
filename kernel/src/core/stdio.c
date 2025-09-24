@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "../graphics/terminal.h"
+#include "devices/uart16550/uart.h"
 #include <stdarg.h>
 
 #define NANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS     1
@@ -28,6 +29,7 @@ int kprintf(const char *format, ...)
         return -1;
     }
 
+    _uart_write(buffer, length);
     _term_write(buffer, length);
 
     return length;
@@ -44,6 +46,7 @@ int kvprintf(const char *format, va_list args)
         return -1;
     }
 
+    _uart_write(buffer, length);
     _term_write(buffer, length);
 
     return length;

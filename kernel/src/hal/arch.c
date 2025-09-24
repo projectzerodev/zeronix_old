@@ -28,14 +28,13 @@ void arch_early_init()
         halt_loop();
     }
 
+    _uart_init();
     _term_init(framebuffer_request.response->framebuffers[0]);
     log_info("Initialized terminal");
 }
 
 void arch_base_init()
 {
-    uart_init();
-    log_info("Initialized serial output");
     amd64_gdt_init();
     log_info("Initialized GDT");
 }
