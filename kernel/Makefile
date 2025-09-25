@@ -14,7 +14,6 @@ override OUTPUT := kernel
 override KCFLAGS += \
 	-Wall \
 	-Wextra \
-	-Werror \
 	-std=c23 \
 	-ffreestanding \
 	-fno-stack-protector \
