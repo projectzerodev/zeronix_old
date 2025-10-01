@@ -87,5 +87,5 @@ void amd64_gdt_load(gdtr_t *pointer, uint16_t code_segment, uint16_t data_segmen
 
 void amd64_gdt_init()
 {
-    amd64_gdt_load(&gdtr, 0x8, 0x10);
+    amd64_gdt_load(&gdtr, GDT_CODE_SEGMENT, GDT_ACCESS_DATA_SEGMENT);
 }

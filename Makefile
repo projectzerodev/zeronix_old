@@ -3,7 +3,7 @@ include tools/utils.mk
 .PHONY: all kernel bootloader disk run bear ovmf clean distclean
 
 $(call USER_VARIABLE, KARCH, x86_64)
-$(call USER_VARIABLE, QEMUFLAGS, -m 128M -M smm=off -serial stdio -d int -D qemu.log)
+$(call USER_VARIABLE, QEMUFLAGS, -m 128M -M smm=off -serial stdio -d int -D qemu.log -no-reboot -no-shutdown)
 
 override OUTPUT := zeronix.iso
 
