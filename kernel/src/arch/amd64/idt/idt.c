@@ -35,7 +35,8 @@ void amd64_idt_init()
                            0x8E); // Present, INT gate
     }
 
-    amd64_idt_load(&idtr);
+    // amd64_idt_load(&idtr);
+    asm("lidt %0" : : "m"(idtr));
 
     asm("sti");
 }
