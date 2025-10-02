@@ -10,7 +10,7 @@ const char *level_colors[] = {"\x1b[1;31m", "\x1b[31m", "\x1b[93m",
 void _log(log_level_t level, const char *format, ...)
 {
     va_list args;
-    va_start(args);
+    va_start(args, format);
 
     kprintf("%s%s%s ", level_colors[level], level_tags[level], COLOR_RESET);
     kvprintf(format, args);
