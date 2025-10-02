@@ -2,6 +2,7 @@
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/isr/isr.h"
 #include "hal/cpu.h"
+#include "utils/log.h"
 #include <stdint.h>
 
 typedef struct
@@ -29,16 +30,18 @@ void amd64_idt_load(idtr_t *pointer);
 
 void amd64_idt_init()
 {
+    log_trace("IDTR Base:  %p", (void *)idt);
+    log_trace("IDTR Limit: %x", idtr.limit);
+
     for (uint16_t vector = 0; vector < IDT_MAX_DESCRIPTORS; vector++)
     {
         amd64_idt_set_gate(vector, amd64_isr_stub_table[vector], GDT_CODE_SEGMENT,
                            0x8E); // Present, INT gate
     }
 
-    // amd64_idt_load(&idtr);
-    asm("lidt %0" : : "m"(idtr));
+    amd64_idt_load(&idtr);
 
-    asm("sti");
+    // asm("sti");
 }
 
 void amd64_idt_set_gate(uint8_t index, void *base, uint16_t selector, uint8_t flags)
