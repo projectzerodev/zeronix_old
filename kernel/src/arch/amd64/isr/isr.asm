@@ -44,7 +44,7 @@ global isr_stub_%+%1
 isr_stub_%+%1:
     push %1
     jmp isr_common
-    iretq
+    ;iretq
 %endmacro
 
 %macro isr_no_err_stub 1
@@ -53,7 +53,7 @@ isr_stub_%+%1:
     push 0
     push %1
     jmp isr_common
-    iretq
+    ;iretq
 %endmacro
 
 isr_no_err_stub 0

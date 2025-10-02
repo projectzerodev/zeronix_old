@@ -5,6 +5,6 @@
 void isr_handler(void *context)
 {
     (void)context;
-    kprintf("Interrupt");
-    halt_loop();
+    kprintf(".");
+    // halt_loop();
 }

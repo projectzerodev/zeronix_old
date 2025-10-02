@@ -25,6 +25,8 @@ __attribute__((aligned(0x10))) static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
 
 idtr_t idtr = {sizeof(idt) - 1, idt};
 
+void amd64_idt_load(idtr_t *pointer);
+
 void amd64_idt_init()
 {
     for (uint16_t vector = 0; vector < IDT_MAX_DESCRIPTORS; vector++)
@@ -32,6 +34,8 @@ void amd64_idt_init()
         amd64_idt_set_gate(vector, amd64_isr_stub_table[vector], GDT_CODE_SEGMENT,
                            0x8E); // Present, INT gate
     }
+
+    amd64_idt_load(&idtr);
 
     asm("sti");
 }
