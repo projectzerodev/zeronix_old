@@ -1,6 +1,7 @@
 #include "arch.h"
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/idt/idt.h"
+#include "core/stdio.h"
 #include "devices/uart16550/uart.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
@@ -32,6 +33,7 @@ void arch_early_init()
 
     _uart_init();
     _term_init(framebuffer_request.response->framebuffers[0]);
+    _stdio_init();
     log_info("Initialized terminal");
 }
 
