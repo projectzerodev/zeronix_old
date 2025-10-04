@@ -14,5 +14,7 @@ void kstart()
     volatile int *ptr = NULL;
     *ptr              = 1234;
 
+    log_trace("AAA");
+
     halt_loop();
 }

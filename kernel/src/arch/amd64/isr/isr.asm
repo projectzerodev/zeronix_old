@@ -36,7 +36,7 @@ isr_common:
     pop rbx
     pop rax
 
-    add rsp, 16 ; pops the error code and the int number
+    add rsp, 16
     iretq
 
 %macro isr_err_stub 1
@@ -44,7 +44,6 @@ global isr_stub_%+%1
 isr_stub_%+%1:
     push %1
     jmp isr_common
-    ;iretq
 %endmacro
 
 %macro isr_no_err_stub 1
@@ -53,7 +52,6 @@ isr_stub_%+%1:
     push 0
     push %1
     jmp isr_common
-    ;iretq
 %endmacro
 
 isr_no_err_stub 0
