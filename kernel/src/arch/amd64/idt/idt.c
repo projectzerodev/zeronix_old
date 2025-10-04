@@ -26,7 +26,7 @@ __attribute__((aligned(0x10))) static idt_entry_t idt[IDT_MAX_DESCRIPTORS];
 
 idtr_t idtr = {sizeof(idt) - 1, idt};
 
-void amd64_idt_load(idtr_t *pointer);
+extern void amd64_idt_load(idtr_t *pointer);
 
 void amd64_idt_init()
 {
