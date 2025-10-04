@@ -1,5 +1,6 @@
 #include "isr.h"
 #include "core/panic.h"
+#include "hal/cpu.h"
 #include "utils/log.h"
 
 void isr_handler(void *context)
@@ -12,7 +13,7 @@ void isr_handler(void *context)
     }
     else
     {
-        panic(registers);
+        panic("Unhandled Exception: 0x%x", registers->interrupt);
+        halt_loop();
     }
-    // halt_loop();
 }

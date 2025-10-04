@@ -1,10 +1,19 @@
 #include "panic.h"
-#include "arch/amd64/isr/isr.h"
+#include "core/stdio.h"
 #include "hal/cpu.h"
-#include "utils/log.h"
+#include <stdarg.h>
 
-void panic(interrupt_frame_t *registers)
+void panic(const char *msg, ...)
 {
-    log_fatal("Panic!");
+    kprintf("\n\x1b[93m### KERNEL PANIC ###\n");
+
+    va_list args;
+    va_start(args, msg);
+    kprintf("\x1b[91m");
+    kvprintf(msg, args);
+    kprintf("\n");
+
+    va_end(args);
+
     halt_loop();
 }
