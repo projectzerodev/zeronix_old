@@ -4,7 +4,7 @@
 
 void isr_handler(void *context)
 {
-    registers_t *registers = context;
+    interrupt_frame_t *registers = context;
 
     if (registers->interrupt >= 32)
     {

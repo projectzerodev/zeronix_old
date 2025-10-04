@@ -3,7 +3,7 @@
 #include "hal/cpu.h"
 #include "utils/log.h"
 
-void panic(registers_t *registers)
+void panic(interrupt_frame_t *registers)
 {
     log_fatal("Panic!");
     halt_loop();
