@@ -32,9 +32,11 @@ void arch_early_init()
     }
 
     _uart_init();
-    _term_init(framebuffer_request.response->framebuffers[0]);
+    terminal_dimensions_t term_dimensions =
+        _term_init(framebuffer_request.response->framebuffers[0]);
     _stdio_init();
-    log_info("Initialized terminal");
+    log_info("Initialized terminal (%i columns, %i rows)", term_dimensions.columns,
+             term_dimensions.rows);
 }
 
 void arch_base_init()
