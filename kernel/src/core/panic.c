@@ -17,7 +17,7 @@ void panic_message(const char *msg, ...)
     halt_loop();
 }
 
-void panic_interrupt(interrupt_frame_t *f)
+void panic_interrupt(amd64_interrupt_frame_t *f)
 {
     kprintf("\n\x1b[93m### KERNEL PANIC ###\n");
     if (!f)

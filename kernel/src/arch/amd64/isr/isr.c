@@ -5,7 +5,7 @@
 
 void isr_handler(void *context)
 {
-    interrupt_frame_t *registers = context;
+    amd64_interrupt_frame_t *registers = context;
 
     if (registers->interrupt >= 32)
     {

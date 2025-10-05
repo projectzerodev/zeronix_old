@@ -33,4 +33,4 @@ typedef struct
     uint64_t rsp;
     uint64_t ss;
 
-} __attribute__((packed)) interrupt_frame_t;
+} __attribute__((packed)) amd64_interrupt_frame_t;

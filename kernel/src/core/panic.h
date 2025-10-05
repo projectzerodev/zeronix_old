@@ -5,7 +5,7 @@
     _Generic((x),                                                                                  \
         const char *: panic_message,                                                               \
         char *: panic_message,                                                                     \
-        interrupt_frame_t *: panic_interrupt)(x, ##__VA_ARGS__)
+        amd64_interrupt_frame_t *: panic_interrupt)(x, ##__VA_ARGS__)
 
 void panic_message(const char *msg, ...);
-void panic_interrupt(interrupt_frame_t *frame);
+void panic_interrupt(amd64_interrupt_frame_t *frame);
