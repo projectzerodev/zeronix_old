@@ -13,7 +13,7 @@ void isr_handler(void *context)
     }
     else
     {
-        panic("Unhandled Exception: 0x%x", registers->interrupt);
+        panic(registers);
         halt_loop();
     }
 }
