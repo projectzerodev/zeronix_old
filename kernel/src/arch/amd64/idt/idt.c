@@ -1,7 +1,6 @@
 #include "idt.h"
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/isr/isr.h"
-#include "hal/cpu.h"
 #include "utils/log.h"
 #include <stdint.h>
 
