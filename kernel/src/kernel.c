@@ -11,8 +11,5 @@ void kstart()
     log_info("Welcome to Zeronix");
     log_info("Kernel built on %s", __DATE__);
 
-    volatile int *ptr = NULL;
-    *ptr              = 1234;
-
     halt_loop();
 }
