@@ -1,5 +1,6 @@
 #include "hal/arch.h"
 #include "hal/cpu.h"
+#include "stddef.h"
 #include "utils/log.h"
 
 void kstart()

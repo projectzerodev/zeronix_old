@@ -1,5 +1,7 @@
 #include "arch.h"
 #include "arch/amd64/gdt/gdt.h"
+#include "arch/amd64/idt/idt.h"
+#include "core/stdio.h"
 #include "devices/uart16550/uart.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
@@ -18,6 +20,7 @@ __attribute__((used, section(".limine_requests_end"))) static volatile LIMINE_RE
 
 void arch_early_init()
 {
+    asm("cli");
     if (LIMINE_BASE_REVISION_SUPPORTED == false)
     {
         halt_loop();
@@ -29,12 +32,17 @@ void arch_early_init()
     }
 
     _uart_init();
-    _term_init(framebuffer_request.response->framebuffers[0]);
-    log_info("Initialized terminal");
+    terminal_dimensions_t term_dimensions =
+        _term_init(framebuffer_request.response->framebuffers[0]);
+    _stdio_init();
+    log_info("Initialized terminal (%i columns, %i rows)", term_dimensions.columns,
+             term_dimensions.rows);
 }
 
 void arch_base_init()
 {
     amd64_gdt_init();
     log_info("Initialized GDT");
+    amd64_idt_init();
+    log_info("Initialized IDT");
 }

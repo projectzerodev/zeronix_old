@@ -1,5 +1,5 @@
 #include "devices/uart16550/uart.h"
-#include "arch/amd64/io.h"
+#include "arch/x86/io.h"
 #include "core/spinlock.h"
 
 // amd64-only uart 16550 implementation
@@ -12,27 +12,27 @@ void _uart_init()
     spinlock_init(&uart_lock);
 
     // Disable interrupts
-    outb(uart_base + UART_REG_IER, 0x00);
+    x86_outb(uart_base + UART_REG_IER, 0x00);
 
     // Enable DLAB to set baud rate divisor
-    outb(uart_base + UART_REG_LCR, UART_LCR_DLAB);
+    x86_outb(uart_base + UART_REG_LCR, UART_LCR_DLAB);
 
     // Set divisor (115200 baud)
-    outb(uart_base + UART_REG_DLL, UART_DIVISOR_LSB);
-    outb(uart_base + UART_REG_DLM, UART_DIVISOR_MSB);
+    x86_outb(uart_base + UART_REG_DLL, UART_DIVISOR_LSB);
+    x86_outb(uart_base + UART_REG_DLM, UART_DIVISOR_MSB);
 
     // Disable DLAB + set frame format (8N1)
-    outb(uart_base + UART_REG_LCR, UART_LCR_8N1);
+    x86_outb(uart_base + UART_REG_LCR, UART_LCR_8N1);
 
     // Enable and clear FIFOs, set trigger to 14 bytes
-    outb(uart_base + UART_REG_FCR,
-         UART_FCR_ENABLE_FIFO | UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX | UART_FCR_TRIGGER_14B);
+    x86_outb(uart_base + UART_REG_FCR,
+             UART_FCR_ENABLE_FIFO | UART_FCR_CLEAR_RX | UART_FCR_CLEAR_TX | UART_FCR_TRIGGER_14B);
 
     // Modem control: enable RTS, DTR, and OUT2
-    outb(uart_base + UART_REG_MCR, UART_MCR_DTR | UART_MCR_RTS | UART_MCR_OUT2);
+    x86_outb(uart_base + UART_REG_MCR, UART_MCR_DTR | UART_MCR_RTS | UART_MCR_OUT2);
 
     // Wait until transmitter ready (THRE)
-    while ((inb(uart_base + UART_REG_LSR) & UART_LSR_THRE) == 0)
+    while ((x86_inb(uart_base + UART_REG_LSR) & UART_LSR_THRE) == 0)
         ;
 }
 
@@ -41,10 +41,10 @@ void _uart_putc(char c)
     spinlock_acquire(&uart_lock);
 
     // Wait for transmit holding register empty
-    while ((inb(uart_base + UART_REG_LSR) & UART_LSR_THRE) == 0)
+    while ((x86_inb(uart_base + UART_REG_LSR) & UART_LSR_THRE) == 0)
         ;
 
-    outb(uart_base + UART_REG_THR, (uint8_t)c);
+    x86_outb(uart_base + UART_REG_THR, (uint8_t)c);
 
     spinlock_release(&uart_lock);
 }

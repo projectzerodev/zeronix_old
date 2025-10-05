@@ -1,4 +1,5 @@
 #include "gdt.h"
+#include "utils/log.h"
 #include <stdint.h>
 
 typedef struct
@@ -83,9 +84,12 @@ gdt_entry_t gdt[] = {
 
 gdtr_t gdtr = {sizeof(gdt) - 1, gdt};
 
-void amd64_gdt_load(gdtr_t *pointer, uint16_t code_segment, uint16_t data_segment);
+extern void amd64_gdt_load(gdtr_t *pointer, uint16_t code_segment, uint16_t data_segment);
 
 void amd64_gdt_init()
 {
+    log_trace("GDTR Base:  %p", (void *)gdt);
+    log_trace("GDTR Limit: %x", gdtr.limit);
+
     amd64_gdt_load(&gdtr, GDT_CODE_SEGMENT, GDT_DATA_SEGMENT);
 }

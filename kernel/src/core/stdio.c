@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "../graphics/terminal.h"
+#include "core/spinlock.h"
 #include "devices/uart16550/uart.h"
 #include <stdarg.h>
 
@@ -15,12 +16,20 @@
 #define NANOPRINTF_IMPLEMENTATION
 #include <nanoprintf.h>
 
+static spinlock_t kprintf_spinlock;
+
+void _stdio_init()
+{
+    spinlock_init(&kprintf_spinlock);
+}
+
 int kprintf(const char *format, ...)
 {
+    spinlock_acquire(&kprintf_spinlock);
     char buffer[1024];
     va_list args;
 
-    va_start(args);
+    va_start(args, format);
     int length = npf_vsnprintf(buffer, sizeof(buffer), format, args);
     va_end(args);
 
@@ -31,6 +40,8 @@ int kprintf(const char *format, ...)
 
     _uart_write(buffer, length);
     _term_write(buffer, length);
+
+    spinlock_release(&kprintf_spinlock);
 
     return length;
 }
