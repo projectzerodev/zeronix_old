@@ -34,3 +34,8 @@ typedef struct
     uint64_t ss;
 
 } __attribute__((packed)) amd64_interrupt_frame_t;
+
+typedef void (*amd64_isr_handler_fn)(void *ctx);
+
+void amd64_isr_init();
+void amd64_isr_register_handler(int interrupt, amd64_isr_handler_fn handler);

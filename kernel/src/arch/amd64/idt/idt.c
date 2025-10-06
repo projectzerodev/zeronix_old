@@ -1,6 +1,7 @@
 #include "idt.h"
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/isr/isr.h"
+#include "utils/binrary.h"
 #include "utils/log.h"
 #include <stdint.h>
 
@@ -39,8 +40,6 @@ void amd64_idt_init()
     }
 
     amd64_idt_load(&idtr);
-
-    // asm("sti");
 }
 
 void amd64_idt_set_gate(uint8_t index, void *base, uint16_t selector, uint8_t flags)
@@ -52,4 +51,14 @@ void amd64_idt_set_gate(uint8_t index, void *base, uint16_t selector, uint8_t fl
     idt[index].offset_mid  = ((uint64_t)base >> 16) & 0xFFFF;
     idt[index].offset_high = ((uint64_t)base >> 32) & 0xFFFFFFFF;
     idt[index].reserved    = 0;
+}
+
+void amd64_idt_gate_enable(int interrupt)
+{
+    FLAG_SET(idt[interrupt].attributes, 0x80);
+}
+
+void amd64_idt_gate_disable(int interrupt)
+{
+    FLAG_UNSET(idt[interrupt].attributes, 0x80);
 }
