@@ -1,6 +1,8 @@
 #include "arch.h"
+#include "arch/amd64/exceptions/exceptions.h"
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/idt/idt.h"
+#include "arch/amd64/isr/isr.h"
 #include "core/stdio.h"
 #include "devices/uart16550/uart.h"
 #include "graphics/terminal.h"
@@ -45,4 +47,11 @@ void arch_base_init()
     log_info("Initialized GDT");
     amd64_idt_init();
     log_info("Initialized IDT");
+    amd64_isr_init();
+    log_info("Initialized ISR");
+    amd64_exceptions_init();
+    log_info("Registered Exception Handlers");
+
+    volatile int *ptr = NULL;
+    *ptr              = 1234;
 }

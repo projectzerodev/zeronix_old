@@ -10,6 +10,7 @@ void panic_message(const char *msg, ...)
     va_list args;
     va_start(args, msg);
     kprintf("\x1b[91m");
+    kprintf("Cause: ");
     kvprintf(msg, args);
     kprintf("\n");
     va_end(args);
