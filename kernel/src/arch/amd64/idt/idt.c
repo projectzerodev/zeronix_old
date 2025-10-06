@@ -40,8 +40,6 @@ void amd64_idt_init()
     }
 
     amd64_idt_load(&idtr);
-
-    // asm("sti");
 }
 
 void amd64_idt_set_gate(uint8_t index, void *base, uint16_t selector, uint8_t flags)

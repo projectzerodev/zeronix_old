@@ -4,6 +4,8 @@
 #include "arch/amd64/idt/idt.h"
 #include "arch/amd64/isr/isr.h"
 #include "core/stdio.h"
+#include "devices/pic8259/pic8259.h"
+#include "devices/pit8253/pit8253.h"
 #include "devices/uart16550/uart.h"
 #include "graphics/terminal.h"
 #include "hal/cpu.h"
@@ -22,7 +24,7 @@ __attribute__((used, section(".limine_requests_end"))) static volatile LIMINE_RE
 
 void arch_early_init()
 {
-    asm("cli");
+    disable_interrupts();
     if (LIMINE_BASE_REVISION_SUPPORTED == false)
     {
         halt_loop();
@@ -51,7 +53,9 @@ void arch_base_init()
     log_info("Initialized ISR");
     amd64_exceptions_init();
     log_info("Registered Exception Handlers");
-
-    volatile int *ptr = NULL;
-    *ptr              = 1234;
+    pic8259_init();
+    log_info("Initialized PIC");
+    pit8253_init();
+    log_info("Initialized PIT");
+    enable_interrupts();
 }
