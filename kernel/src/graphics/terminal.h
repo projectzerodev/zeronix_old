@@ -9,5 +9,5 @@ typedef struct
     size_t rows;
 } terminal_dimensions_t;
 
-terminal_dimensions_t _term_init(struct limine_framebuffer *fb);
+void _term_init(struct limine_framebuffer *fb, terminal_dimensions_t *term);
 void _term_write(const char *buf, size_t len);

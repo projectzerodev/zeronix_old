@@ -39,4 +39,5 @@ void amd64_isr_register_handler(int interrupt, amd64_isr_handler_fn handler)
 {
     isr_handlers[interrupt] = handler;
     amd64_idt_gate_enable(interrupt);
+    log_trace("ISR handler registered for interrupt 0x%02x", interrupt);
 }
