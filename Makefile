@@ -49,9 +49,8 @@ menuconfig:
 	kconfig-mconf Kconfig
 	./tools/kconfig.sh
 
-bear:
+bear: clean
 	bear -- make
-	$(MAKE) clean
 
 ovmf: ovmf/ovmf-code-$(KARCH).fd ovmf/ovmf-vars-$(KARCH).fd
 
