@@ -15,5 +15,4 @@ void hal_early_init()
 
     _tty_init(&framebuffer_request);
     _kprintf_init();
-    kprintf("Welcome to Zeronix\n");
 }
