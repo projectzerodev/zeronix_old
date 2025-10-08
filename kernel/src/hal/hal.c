@@ -3,6 +3,7 @@
 #include "dev/tty.h"
 #include "hal/cpu.h"
 #include "limine.h"
+#include "util/kprintf.h"
 #include <stddef.h>
 
 void hal_early_init()
@@ -13,5 +14,6 @@ void hal_early_init()
     }
 
     _tty_init(&framebuffer_request);
-    _tty_write("Welcome to Zeronix\n", sizeof("Welcome to Zeronix\n"));
+    _kprintf_init();
+    kprintf("Welcome to Zeronix\n");
 }
