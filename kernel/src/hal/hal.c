@@ -1,4 +1,5 @@
 #include "hal.h"
+#include "arch/amd64/gdt/gdt.h"
 #include "boot/boot.h"
 #include "dev/tty.h"
 #include "hal/cpu.h"
@@ -15,4 +16,9 @@ void hal_early_init()
 
     _tty_init(&framebuffer_request);
     _kprintf_init();
+}
+
+void hal_base_init()
+{
+    amd64_gdt_init();
 }

@@ -5,6 +5,7 @@
 void kstart()
 {
     hal_early_init();
+    hal_base_init();
 
     log_info("Welcome to Zeronix!");
 
