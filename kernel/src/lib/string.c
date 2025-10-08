@@ -1,6 +1,6 @@
-#include "string.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 // Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
