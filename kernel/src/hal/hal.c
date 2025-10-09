@@ -1,4 +1,5 @@
 #include "hal.h"
+#include "arch/amd64/exceptions/exceptions.h"
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/idt/idt.h"
 #include "arch/amd64/isr/isr.h"
@@ -25,4 +26,5 @@ void hal_base_init()
     amd64_gdt_init();
     amd64_idt_init();
     amd64_isr_init();
+    amd64_exceptions_init();
 }

@@ -15,7 +15,7 @@ void amd64_isr_init()
         amd64_idt_gate_enable(v);
     }
 
-    log_debug("Initialized ISRs");
+    log_debug("Initialized ISR");
 }
 
 void isr_handler(void *context)
@@ -41,5 +41,5 @@ void amd64_isr_register_handler(int interrupt, amd64_isr_handler_fn handler)
 {
     isr_handlers[interrupt] = handler;
     amd64_idt_gate_enable(interrupt);
-    log_debug("ISR handler registered for interrupt 0x%02x", interrupt);
+    log_debug("ISR handler registered for interrupt 0x%02X", interrupt);
 }
