@@ -1,5 +1,7 @@
 #include "hal.h"
 #include "arch/amd64/gdt/gdt.h"
+#include "arch/amd64/idt/idt.h"
+#include "arch/amd64/isr/isr.h"
 #include "boot/boot.h"
 #include "dev/tty.h"
 #include "hal/cpu.h"
@@ -21,4 +23,6 @@ void hal_early_init()
 void hal_base_init()
 {
     amd64_gdt_init();
+    amd64_idt_init();
+    amd64_isr_init();
 }

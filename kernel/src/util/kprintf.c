@@ -42,3 +42,19 @@ int kprintf(const char *fmt, ...)
 
     return len;
 }
+
+int kvprintf(const char *fmt, va_list args)
+{
+    char buf[1024];
+
+    int length = npf_vsnprintf(buf, sizeof(buf), fmt, args);
+
+    if (length < 0 || length >= (int)sizeof(buf))
+    {
+        return -1;
+    }
+
+    _tty_write(buf, length);
+
+    return length;
+}
