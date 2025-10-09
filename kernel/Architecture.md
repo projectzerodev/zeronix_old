@@ -7,7 +7,7 @@ arch        # Architecture-specific code    f. x. `amd64/`
 boot        # Bootloader abstraction        f. x. `boot.h`
 core        # Scheduler, panic etc.         f. x. `panic.h`
 dev         # Devices abstractions          f. x. `tty.h`
-driv        # Device drivers                f. x. `pic8259/`
+drivers     # Device drivers                f. x. `uart16550/`
 fs          # Filesystem implementations    f. x. `fat32/`
 hal         # Hardware abstraction          f. x. `vfs.h`
 lib         # Pure library functions        f. x. `string.c`
