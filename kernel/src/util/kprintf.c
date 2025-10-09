@@ -1,4 +1,5 @@
 #include "kprintf.h"
+#include "dev/com.h"
 #include "dev/tty.h"
 #include "lib/spinlock.h"
 
@@ -37,6 +38,7 @@ int kprintf(const char *fmt, ...)
     }
 
     _tty_write(buf, len);
+    _com_write(buf, len);
 
     spinlock_release(&kprintf_lock);
 
@@ -47,14 +49,15 @@ int kvprintf(const char *fmt, va_list args)
 {
     char buf[1024];
 
-    int length = npf_vsnprintf(buf, sizeof(buf), fmt, args);
+    int len = npf_vsnprintf(buf, sizeof(buf), fmt, args);
 
-    if (length < 0 || length >= (int)sizeof(buf))
+    if (len < 0 || len >= (int)sizeof(buf))
     {
         return -1;
     }
 
-    _tty_write(buf, length);
+    _tty_write(buf, len);
+    _com_write(buf, len);
 
-    return length;
+    return len;
 }

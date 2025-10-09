@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIG_FILE=".config"
-HEADER_FILE="kernel/src/utils/autoconf.h"
+HEADER_FILE="kernel/src/gen/autoconf.h"
 
 echo "/* Auto-generated header */" > "$HEADER_FILE"
 
