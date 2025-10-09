@@ -13,7 +13,7 @@
  * @warning if `framebuffer_request` is NULL or it doesn't contain any
  *          framebuffers the system will halt.
  */
-void _tty_init(volatile struct limine_framebuffer_request *framebuffer_request);
+void _term_init(volatile struct limine_framebuffer_request *framebuffer_request);
 
 /**
  * @brief Writes data to the terminal.
@@ -30,4 +30,4 @@ void _tty_init(volatile struct limine_framebuffer_request *framebuffer_request);
  * @warning Behavior is undefined if the terminal hasn't been
  *          initialized using `_tty_init`
  */
-void _tty_write(const char *buf, size_t len);
+void _term_write(const char *buf, size_t len);

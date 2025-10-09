@@ -2,7 +2,6 @@
 #include "../pic/pic.h"
 #include "arch/amd64/isr/isr.h"
 #include "arch/amd64/pic/pic.h"
-#include "util/kprintf.h"
 #include "util/log.h"
 #include <stdint.h>
 
@@ -22,7 +21,6 @@ static void amd64_pit_tick_handler(void *context)
     (void)context;
     ticks++;
     amd64_pic_send_eoi(0);
-    kprintf(".");
 }
 
 uint64_t amd64_pit_get_ticks()

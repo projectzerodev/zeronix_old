@@ -6,7 +6,7 @@
 #include "arch/amd64/pic/pic.h"
 #include "arch/amd64/pit/pit.h"
 #include "boot/boot.h"
-#include "dev/tty.h"
+#include "dev/term.h"
 #include "hal/cpu.h"
 #include "limine.h"
 #include "util/kprintf.h"
@@ -20,7 +20,7 @@ void hal_early_init()
         halt_loop();
     }
 
-    _tty_init(&framebuffer_request);
+    _term_init(&framebuffer_request);
     _kprintf_init();
 }
 

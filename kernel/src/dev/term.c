@@ -1,4 +1,4 @@
-#include "tty.h"
+#include "term.h"
 #include "flanterm.h"
 #include "flanterm_backends/fb.h"
 #include "hal/cpu.h"
@@ -6,7 +6,7 @@
 
 struct flanterm_context *ft_ctx;
 
-void _tty_init(volatile struct limine_framebuffer_request *framebuffer_request)
+void _term_init(volatile struct limine_framebuffer_request *framebuffer_request)
 {
     if (framebuffer_request->response == NULL ||
         framebuffer_request->response->framebuffer_count < 1)
@@ -22,7 +22,7 @@ void _tty_init(volatile struct limine_framebuffer_request *framebuffer_request)
                               NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 1, 0, 0, 0);
 }
 
-void _tty_write(const char *buf, size_t len)
+void _term_write(const char *buf, size_t len)
 {
     flanterm_write(ft_ctx, buf, len);
 }

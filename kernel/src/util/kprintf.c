@@ -1,6 +1,6 @@
 #include "kprintf.h"
-#include "dev/com.h"
-#include "dev/tty.h"
+#include "dev/serial.h"
+#include "dev/term.h"
 #include "lib/spinlock.h"
 
 #define NANOPRINTF_USE_FIELD_WIDTH_FORMAT_SPECIFIERS     1
@@ -37,8 +37,8 @@ int kprintf(const char *fmt, ...)
         return -1;
     }
 
-    _tty_write(buf, len);
-    _com_write(buf, len);
+    _term_write(buf, len);
+    _serial_write(buf, len);
 
     spinlock_release(&kprintf_lock);
 
@@ -56,8 +56,8 @@ int kvprintf(const char *fmt, va_list args)
         return -1;
     }
 
-    _tty_write(buf, len);
-    _com_write(buf, len);
+    _term_write(buf, len);
+    _serial_write(buf, len);
 
     return len;
 }
