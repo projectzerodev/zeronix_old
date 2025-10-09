@@ -12,3 +12,13 @@ static void halt_loop()
         halt();
     }
 }
+
+static void disable_interrupts()
+{
+    __asm__ volatile("cli");
+}
+
+static void enable_interrupts()
+{
+    __asm__ volatile("sti");
+}
