@@ -1,13 +1,13 @@
-#include "devices/uart16550/uart.h"
+#include "uart16550.h"
 #include "arch/x86/io.h"
-#include "core/spinlock.h"
+#include "lib/spinlock.h"
 
 // amd64-only uart 16550 implementation
 
 static uint16_t uart_base = UART_COM1_BASE;
 static spinlock_t uart_lock;
 
-void _uart_init()
+void _uart16550_init()
 {
     spinlock_init(&uart_lock);
 
@@ -36,7 +36,7 @@ void _uart_init()
         ;
 }
 
-void _uart_putc(char c)
+void _uart16550_putc(char c)
 {
     spinlock_acquire(&uart_lock);
 
@@ -49,13 +49,13 @@ void _uart_putc(char c)
     spinlock_release(&uart_lock);
 }
 
-int _uart_write(const char *buf, size_t len)
+int _uart16550_write(const char *buf, size_t len)
 {
     if (!buf)
         return -1;
 
     for (size_t i = 0; i < len; i++)
-        _uart_putc(buf[i]);
+        _uart16550_putc(buf[i]);
 
     return 0;
 }

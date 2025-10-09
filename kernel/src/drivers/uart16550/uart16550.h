@@ -34,6 +34,6 @@
 #define UART_DIVISOR_LSB 0x01
 #define UART_DIVISOR_MSB 0x00
 
-void _uart_init();
-void _uart_putc(char c);
-int _uart_write(const char *buf, size_t len);
+void _uart16550_init();
+void _uart16550_putc(char c);
+int _uart16550_write(const char *buf, size_t len);

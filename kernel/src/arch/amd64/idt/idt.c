@@ -1,8 +1,8 @@
 #include "idt.h"
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/isr/isr.h"
-#include "utils/binrary.h"
-#include "utils/log.h"
+#include "lib/binary.h"
+#include "util/log.h"
 #include <stdint.h>
 
 typedef struct
@@ -30,8 +30,8 @@ extern void amd64_idt_load(idtr_t *pointer);
 
 void amd64_idt_init()
 {
-    log_trace("IDTR Base:  %p", (void *)idt);
-    log_trace("IDTR Limit: %x", idtr.limit);
+    log_debug("IDTR Base:  %p", (void *)idt);
+    log_debug("IDTR Limit: %x", idtr.limit);
 
     for (uint16_t vector = 0; vector < IDT_MAX_DESCRIPTORS; vector++)
     {
@@ -40,6 +40,8 @@ void amd64_idt_init()
     }
 
     amd64_idt_load(&idtr);
+
+    log_debug("Loaded IDT");
 }
 
 void amd64_idt_set_gate(uint8_t index, void *base, uint16_t selector, uint8_t flags)

@@ -1,5 +1,6 @@
-#include "pic8259.h"
+#include "pic.h"
 #include "arch/x86/io.h"
+#include "util/log.h"
 #include <stdint.h>
 
 #define PIC1_CMD_PORT  0x20
@@ -16,9 +17,9 @@
 
 static uint16_t pic_mask;
 
-void pic8259_init()
+void amd64_pic_init()
 {
-    pic8259_set_mask(0xffff);
+    amd64_pic_set_mask(0xffff);
 
     // 0x01: We wan't to send 4 initialization words
     // 0x10: Begin the initialization sequence
@@ -46,10 +47,12 @@ void pic8259_init()
     x86_outb(PIC2_DATA_PORT, PIC_ICW4);
     x86_iowait();
 
-    pic8259_set_mask(0xffff);
+    amd64_pic_set_mask(0xffff);
+
+    log_debug("Initialized PIC");
 }
 
-void pic8259_send_eoi(int irq)
+void amd64_pic_send_eoi(int irq)
 {
     if (irq >= 8)
     {
@@ -58,7 +61,7 @@ void pic8259_send_eoi(int irq)
     x86_outb(PIC1_CMD_PORT, PIC_CMD_END_OF_INTERRUPT);
 }
 
-void pic8259_set_mask(uint16_t new_mask)
+void amd64_pic_set_mask(uint16_t new_mask)
 {
     pic_mask = new_mask;
     x86_outb(PIC1_DATA_PORT, pic_mask & 0xFF);
@@ -67,12 +70,12 @@ void pic8259_set_mask(uint16_t new_mask)
     x86_iowait();
 }
 
-void pic8259_mask(int irq)
+void amd64_pic_mask(int irq)
 {
-    pic8259_set_mask(pic_mask | (1 << irq));
+    amd64_pic_set_mask(pic_mask | (1 << irq));
 }
 
-void pic8259_unmask(int irq)
+void amd64_pic_unmask(int irq)
 {
-    pic8259_set_mask(pic_mask & ~(1 << irq));
+    amd64_pic_set_mask(pic_mask & ~(1 << irq));
 }

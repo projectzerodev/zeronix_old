@@ -1,8 +1,8 @@
-#include "string.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
-// GCC and Clang reserve the right to generate calls to the following
+// Clang reserve the right to generate calls to the following
 // 4 functions even if they are not directly called.
 
 void *memcpy(void *restrict dest, const void *restrict src, size_t n)

@@ -1,6 +1,6 @@
 #include "panic.h"
-#include "core/stdio.h"
 #include "hal/cpu.h"
+#include "util/kprintf.h"
 #include <stdarg.h>
 
 void panic_message(const char *msg, ...)

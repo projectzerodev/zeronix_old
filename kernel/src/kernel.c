@@ -1,15 +1,13 @@
-#include "hal/arch.h"
 #include "hal/cpu.h"
-#include "stddef.h"
-#include "utils/log.h"
+#include "hal/hal.h"
+#include "util/log.h"
 
 void kstart()
 {
-    arch_early_init();
-    arch_base_init();
+    hal_early_init();
+    hal_base_init();
 
-    log_info("Welcome to Zeronix");
-    log_info("Kernel built on %s", __DATE__);
+    log_info("Welcome to Zeronix!");
 
     halt_loop();
 }

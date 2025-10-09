@@ -1,5 +1,5 @@
 #include "gdt.h"
-#include "utils/log.h"
+#include "util/log.h"
 #include <stdint.h>
 
 typedef struct
@@ -14,7 +14,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t limit; // sizeof(gdt) - 1
+    uint16_t limit;
     gdt_entry_t *entry;
 } __attribute__((packed)) gdtr_t;
 
@@ -88,8 +88,10 @@ extern void amd64_gdt_load(gdtr_t *pointer, uint16_t code_segment, uint16_t data
 
 void amd64_gdt_init()
 {
-    log_trace("GDTR Base:  %p", (void *)gdt);
-    log_trace("GDTR Limit: %x", gdtr.limit);
+    log_debug("GDTR Base:  %p", (void *)gdt);
+    log_debug("GDTR Limit: %x", gdtr.limit);
 
     amd64_gdt_load(&gdtr, GDT_CODE_SEGMENT, GDT_DATA_SEGMENT);
+
+    log_debug("Loaded GDT");
 }
