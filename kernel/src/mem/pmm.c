@@ -91,7 +91,7 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
         }
     }
 
-    log_info("PMM initialized. Bitmap size: %llu bytes (%llu pages tracked)", bitmap_size,
+    log_info("Initialized PMM. Bitmap size: %llu bytes (%llu pages tracked)", bitmap_size,
              bitmap_pages);
 }
 
