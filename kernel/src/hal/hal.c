@@ -9,6 +9,7 @@
 #include "dev/term.h"
 #include "hal/cpu.h"
 #include "limine.h"
+#include "mem/pmm.h"
 #include "util/kprintf.h"
 #include <stddef.h>
 
@@ -32,5 +33,6 @@ void hal_base_init()
     amd64_exceptions_init();
     amd64_pic_init();
     amd64_pit_init();
+    pmm_init(&memmap_request, &hhdm_request);
     enable_interrupts();
 }
