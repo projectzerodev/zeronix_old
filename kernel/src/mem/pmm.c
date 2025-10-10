@@ -12,8 +12,8 @@
 
 spinlock_t pmm_lock;
 uint8_t *bitmap;
-uint64_t bitmap_pages; // The amount of pages in memory
-uint64_t bitmap_size;  // The amount of bytes the bitmap uses
+uint64_t bitmap_pages; // Total number of pages in memory
+uint64_t bitmap_size;  // Size of the bitmap in bytes
 
 static inline bool is_aligned(physaddr_t addr, size_t align)
 {
@@ -34,8 +34,9 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
     struct limine_memmap_response *memmap = memmap_request->response;
     struct limine_hhdm_response *hhdm     = hhdm_request->response;
 
-    uint64_t high;
+    uint64_t high = 0;
 
+    // Find the top of usable memory
     for (uint64_t i = 0; i < memmap->entry_count; i++)
     {
         struct limine_memmap_entry *e = memmap->entries[i];
@@ -53,6 +54,8 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
     bitmap_pages = high / PAGE_SIZE;
     bitmap_size  = ALIGN_UP(bitmap_pages / 8, PAGE_SIZE);
 
+    // Find a region for the bitmap itself
+    bitmap = NULL;
     for (uint64_t i = 0; i < memmap->entry_count; i++)
     {
         struct limine_memmap_entry *e = memmap->entries[i];
@@ -66,6 +69,13 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
         }
     }
 
+    if (!bitmap)
+    {
+        log_error("Failed to allocate space for PMM bitmap. Halting...");
+        halt_loop();
+    }
+
+    // Mark usable pages as free
     for (uint64_t i = 0; i < memmap->entry_count; i++)
     {
         struct limine_memmap_entry *e = memmap->entries[i];
@@ -80,9 +90,11 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
             }
         }
     }
+
+    log_info("PMM initialized. Bitmap size: %llu bytes (%llu pages tracked)", bitmap_size,
+             bitmap_pages);
 }
 
-// If you wan't to just add the HHDM offset for the virtual address
 physaddr_t palloc(size_t n)
 {
     if (n == 0)
@@ -102,19 +114,22 @@ physaddr_t palloc(size_t n)
             uint64_t start_bit   = i * BITMAP_WORD_SIZE;
             uint64_t consecutive = 0;
 
-            for (uint64_t j = 0; j < BITMAP_WORD_SIZE && start_bit + j < bitmap_pages; j++)
+            for (uint64_t j = 0; j < BITMAP_WORD_SIZE && (start_bit + j) < bitmap_pages; j++)
             {
                 if (!bitmap_get(bitmap, start_bit + j))
                 {
-                    if (++consecutive == n)
+                    consecutive++;
+                    if (consecutive == n)
                     {
+                        uint64_t first_page = start_bit + j - n + 1;
+
                         for (uint64_t k = 0; k < n; k++)
                         {
-                            bitmap_set(bitmap, start_bit + j - n + 1 + k);
+                            bitmap_set(bitmap, first_page + k);
                         }
 
-                        physaddr_t addr = (physaddr_t)((start_bit + j - n + 1) * PAGE_SIZE);
-                        memset((void *)addr, 0, n * PAGE_SIZE);
+                        physaddr_t addr = (physaddr_t)(first_page * PAGE_SIZE);
+                        // memset((void *)addr, 0, n * PAGE_SIZE);
                         spinlock_release(&pmm_lock);
                         return addr;
                     }
@@ -135,17 +150,18 @@ void pfree(physaddr_t addr, size_t n)
 {
     if (!is_aligned(addr, PAGE_SIZE))
     {
+        log_warn("Attempted to free unaligned address 0x%016llx", addr);
         return;
     }
 
     spinlock_acquire(&pmm_lock);
 
-    uint64_t start = (uint64_t)addr / PAGE_SIZE;
+    uint64_t start = addr / PAGE_SIZE;
 
     if (start + n > bitmap_pages)
     {
         spinlock_release(&pmm_lock);
-        log_warn("Tried to free %i non-existing page(s) at 0x%.16llx", n, addr);
+        log_warn("Tried to free %zu non-existing page(s) at 0x%016llx", n, addr);
         return;
     }
 
