@@ -15,9 +15,9 @@ uint8_t *bitmap;
 uint64_t bitmap_pages; // Total number of pages in memory
 uint64_t bitmap_size;  // Size of the bitmap in bytes
 
-static inline bool is_aligned(physaddr_t addr, size_t align)
+static inline bool is_aligned(uintptr_t addr, size_t align)
 {
-    return ((uintptr_t)addr % align) == 0;
+    return (addr % align) == 0;
 }
 
 void pmm_init(volatile struct limine_memmap_request *memmap_request,
@@ -145,22 +145,29 @@ void *palloc(size_t n)
     return NULL;
 }
 
-void pfree(physaddr_t addr, size_t n)
+void pfree(void *addr, size_t n)
 {
-    if (!is_aligned(addr, PAGE_SIZE))
+    if (addr == NULL || n == 0)
     {
-        log_warn("Attempted to free unaligned address 0x%016llx", addr);
+        return;
+    }
+
+    uintptr_t phys = (uintptr_t)addr;
+
+    if (!is_aligned(phys, PAGE_SIZE))
+    {
+        log_warn("Attempted to free unaligned address %p", addr);
         return;
     }
 
     spinlock_acquire(&pmm_lock);
 
-    uint64_t start = addr / PAGE_SIZE;
+    uint64_t start = phys / PAGE_SIZE;
 
     if (start + n > bitmap_pages)
     {
         spinlock_release(&pmm_lock);
-        log_warn("Tried to free %zu non-existing page(s) at 0x%016llx", n, addr);
+        log_warn("Tried to free %zu non-existing page(s) at %p", n, addr);
         return;
     }
 
