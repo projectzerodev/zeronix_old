@@ -95,11 +95,11 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
              bitmap_pages);
 }
 
-physaddr_t palloc(size_t n)
+void *palloc(size_t n)
 {
     if (n == 0)
     {
-        return 0;
+        return NULL;
     }
 
     spinlock_acquire(&pmm_lock);
@@ -128,8 +128,7 @@ physaddr_t palloc(size_t n)
                             bitmap_set(bitmap, first_page + k);
                         }
 
-                        physaddr_t addr = (physaddr_t)(first_page * PAGE_SIZE);
-                        // memset((void *)addr, 0, n * PAGE_SIZE);
+                        void *addr = (void *)(uintptr_t)(first_page * PAGE_SIZE);
                         spinlock_release(&pmm_lock);
                         return addr;
                     }
@@ -143,7 +142,7 @@ physaddr_t palloc(size_t n)
     }
 
     spinlock_release(&pmm_lock);
-    return 0;
+    return NULL;
 }
 
 void pfree(physaddr_t addr, size_t n)
