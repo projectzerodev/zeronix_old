@@ -1,9 +1,11 @@
 #include "pmm.h"
+#include "boot/boot.h"
 #include "hal/cpu.h"
 #include "lib/align.h"
 #include "lib/bitmap.h"
 #include "lib/spinlock.h"
 #include "limine.h"
+#include "mem/mmutil.h"
 #include "util/log.h"
 #include <stdint.h>
 #include <string.h>
@@ -95,7 +97,7 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
              bitmap_pages);
 }
 
-void *palloc(size_t n)
+void *palloc(size_t n, bool higher_half)
 {
     if (n == 0)
     {
@@ -130,7 +132,9 @@ void *palloc(size_t n)
 
                         void *addr = (void *)(uintptr_t)(first_page * PAGE_SIZE);
                         spinlock_release(&pmm_lock);
-                        return addr;
+
+                        // Added HHDM support (minimal change)
+                        return higher_half ? (void *)((uint64_t)addr + HHDM_OFFSET) : addr;
                     }
                 }
                 else
@@ -153,6 +157,11 @@ void pfree(void *addr, size_t n)
     }
 
     uintptr_t phys = (uintptr_t)addr;
+
+    if (phys >= HHDM_OFFSET)
+    {
+        phys -= HHDM_OFFSET;
+    }
 
     if (!is_aligned(phys, PAGE_SIZE))
     {
