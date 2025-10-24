@@ -14,6 +14,9 @@
 #include "util/kprintf.h"
 #include <stddef.h>
 
+uint64_t kvirt = 0;
+uint64_t kphys = 0;
+
 void hal_early_init()
 {
     disable_interrupts();
@@ -35,6 +38,6 @@ void hal_base_init()
     amd64_pic_init();
     amd64_pit_init();
     pmm_init(&memmap_request, &hhdm_request);
-    amd64_paging_init();
+    amd64_paging_init(&memmap_request);
     enable_interrupts();
 }
