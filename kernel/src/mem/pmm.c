@@ -1,9 +1,11 @@
 #include "pmm.h"
+#include "boot/boot.h"
 #include "hal/cpu.h"
 #include "lib/align.h"
 #include "lib/bitmap.h"
 #include "lib/spinlock.h"
 #include "limine.h"
+#include "mem/mmutil.h"
 #include "util/log.h"
 #include <stdint.h>
 #include <string.h>
@@ -15,9 +17,9 @@ uint8_t *bitmap;
 uint64_t bitmap_pages; // Total number of pages in memory
 uint64_t bitmap_size;  // Size of the bitmap in bytes
 
-static inline bool is_aligned(physaddr_t addr, size_t align)
+static inline bool is_aligned(uintptr_t addr, size_t align)
 {
-    return ((uintptr_t)addr % align) == 0;
+    return (addr % align) == 0;
 }
 
 void pmm_init(volatile struct limine_memmap_request *memmap_request,
@@ -95,11 +97,11 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
              bitmap_pages);
 }
 
-physaddr_t palloc(size_t n)
+void *palloc(size_t n, bool higher_half)
 {
     if (n == 0)
     {
-        return 0;
+        return NULL;
     }
 
     spinlock_acquire(&pmm_lock);
@@ -128,10 +130,11 @@ physaddr_t palloc(size_t n)
                             bitmap_set(bitmap, first_page + k);
                         }
 
-                        physaddr_t addr = (physaddr_t)(first_page * PAGE_SIZE);
-                        // memset((void *)addr, 0, n * PAGE_SIZE);
+                        void *addr = (void *)(uintptr_t)(first_page * PAGE_SIZE);
                         spinlock_release(&pmm_lock);
-                        return addr;
+
+                        // Added HHDM support (minimal change)
+                        return higher_half ? (void *)((uint64_t)addr + HHDM_OFFSET) : addr;
                     }
                 }
                 else
@@ -143,25 +146,37 @@ physaddr_t palloc(size_t n)
     }
 
     spinlock_release(&pmm_lock);
-    return 0;
+    return NULL;
 }
 
-void pfree(physaddr_t addr, size_t n)
+void pfree(void *addr, size_t n)
 {
-    if (!is_aligned(addr, PAGE_SIZE))
+    if (addr == NULL || n == 0)
     {
-        log_warn("Attempted to free unaligned address 0x%016llx", addr);
+        return;
+    }
+
+    uintptr_t phys = (uintptr_t)addr;
+
+    if (phys >= HHDM_OFFSET)
+    {
+        phys -= HHDM_OFFSET;
+    }
+
+    if (!is_aligned(phys, PAGE_SIZE))
+    {
+        log_warn("Attempted to free unaligned address %p", addr);
         return;
     }
 
     spinlock_acquire(&pmm_lock);
 
-    uint64_t start = addr / PAGE_SIZE;
+    uint64_t start = phys / PAGE_SIZE;
 
     if (start + n > bitmap_pages)
     {
         spinlock_release(&pmm_lock);
-        log_warn("Tried to free %zu non-existing page(s) at 0x%016llx", n, addr);
+        log_warn("Tried to free %zu non-existing page(s) at %p", n, addr);
         return;
     }
 
