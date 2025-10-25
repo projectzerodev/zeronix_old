@@ -3,7 +3,6 @@
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/idt/idt.h"
 #include "arch/amd64/isr/isr.h"
-#include "arch/amd64/paging/paging.h"
 #include "arch/amd64/pic/pic.h"
 #include "arch/amd64/pit/pit.h"
 #include "boot/boot.h"
@@ -35,6 +34,5 @@ void hal_base_init()
     amd64_pic_init();
     amd64_pit_init();
     pmm_init(&memmap_request, &hhdm_request);
-    amd64_paging_init();
     enable_interrupts();
 }
