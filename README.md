@@ -1,10 +1,17 @@
 # Zeronix
 
 <!--
-Zeronix is a minimal operating system designed to serve as a foundation for other distributions rather than as a standalone system. It provides only the essential components, including a bootloader, kernel, package manager, and a set of core utilities.
+Zeronix is a minimal operating system designed to serve as a foundation for
+other distributions rather than as a standalone system. It provides only the
+essential components, including a bootloader, kernel, package manager, and a set
+of core utilities.
 -->
 
 ## Building
+
+This section covers building Zeronix.
+
+### Prequisites
 
 You will need the following external dependecies to build Zeronix:
 
@@ -15,7 +22,9 @@ You will need the following external dependecies to build Zeronix:
 * `xorriso`: The ISO image creation tool. Supports version 1.5 or newer.
 * `git`: The version control used. Supports version 2 or newer.
 
-Keep in mind that you do not need to check every version unless you have issues building. The only required is Clang which needs to be version 18+ because of C23 support.
+Keep in mind that you do not need to check every version unless you have issues
+building. The only required is Clang which needs to be version 18+ because of
+C23 support.
 
 ### Getting the source
 
@@ -33,7 +42,11 @@ gmake
 
 ## Running
 
+This section covers running Zeronix
+
 ### QEMU
+
+Before running in QEMU make sure both `curl` and `qemu-system-x86` is installed.
 
 You can run Zeronix in QEMU by running:
 
@@ -43,9 +56,11 @@ gmake run
 
 ### Real Hardware
 
-You can run Zeronix on real hardware by using [Balena Etcher] to flash the ISO to a thumb drive. Keep in mind that [Rufus] is not supported.
+You can run Zeronix on real hardware by using [Balena Etcher] to flash the ISO
+to a thumb drive. Keep in mind that [Rufus] is not supported.
 
-Testing on real hardware is made at least every merge into the `stable` branch. The hardware which is being tested on is the following:
+Testing on real hardware is made at least every merge into the `stable` branch.
+The hardware which is being tested on is the following:
 
 * Intel i7-2760QM
 * ATI Radeon 6970M
@@ -53,7 +68,9 @@ Testing on real hardware is made at least every merge into the `stable` branch. 
 
 ## Getting `compile_commands.json`
 
-The `compile_commands.json` file provides `clangd` and code editors with information about how each source file in a project is compiled. Before generating it make sure `bear` is installed.
+The `compile_commands.json` file provides `clangd` and code editors with
+information about how each source file in a project is compiled. Before
+generating it make sure `bear` is installed.
 
 You can get `compile_commands.json` by running:
 
@@ -61,7 +78,8 @@ You can get `compile_commands.json` by running:
 make bear
 ```
 
-After that you will need to restart you LSP. In Visual Studio Code press `CRTL + SHIFT + P` and run `clangd: Restart language server`.
+After that you will need to restart you LSP. In Visual Studio Code press
+`CRTL + SHIFT + P` and run `clangd: Restart language server`.
 
 [Balena Etcher]: https://etcher.balena.io/
 [Rufus]: https://rufus.ie/en/
