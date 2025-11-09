@@ -66,6 +66,17 @@ The hardware which is being tested on is the following:
 * ATI Radeon 6970M
 * 16 GB DDR3
 
+## Configuring
+
+You can configure the build using Kconfig. Keep in mind you will need to have `kconfig-frontends`
+installed.
+
+You can launch the configuration menu by running:
+
+```sh
+make menuconfig
+```
+
 ## Getting `compile_commands.json`
 
 The `compile_commands.json` file provides `clangd` and code editors with
