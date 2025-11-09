@@ -66,7 +66,7 @@ After that you will need to restart you LSP. In Visual Studio Code press `CRTL +
 [Balena Etcher]: https://etcher.balena.io/
 [Rufus]: https://rufus.ie/en/
 
-### License
+## License
 
 Zeronix is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
 
