@@ -83,7 +83,7 @@ make menuconfig
 
 The `compile_commands.json` file provides `clangd` and code editors with
 information about how each source file in a project is compiled. Before
-generating it make sure `bear` is installed.
+generating it make sure `bear` are installed.
 
 You can get `compile_commands.json` by running:
 
