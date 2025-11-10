@@ -1,32 +1,33 @@
 # Zeronix
 
-<!--
+>[!Caution]
+>Zeronix is in early development. Many components are incomplete, experimental, or not yet implemented.
+
 Zeronix is a minimal operating system designed to serve as a foundation for
 other distributions rather than as a standalone system. It provides only the
 essential components, including a bootloader, kernel, package manager, and a set
 of core utilities.
--->
 
 ## Building
 
 This section covers building Zeronix.
 
-### Prequisites
+### Prerequisites
 
-You will need the following external dependecies to build Zeronix:
+You will need the following external dependencies to build Zeronix:
 
-* `clang`: The C compiler used. Requires version 18 or newer.
-* `nasm`: The assember used. Supports version 2.16 or newer.
-* `gmake` The build system used. Supports version 4.4 or newer.
-* `curl`: Used for downloading dependencies. Supports version 8 or newer.
-* `xorriso`: The ISO image creation tool. Supports version 1.5 or newer.
-* `git`: The version control used. Supports version 2 or newer.
+| **Dependency** | Version | Purpose         |
+| -------------- | ------- | --------------- |
+| `clang`        | 18+     | C23 compiler    |
+| `nasm`         | 2.16+   | Assembler       |
+| `make`         | 4.4+    | Build system    |
+| `xorriso`      | 1.5+    | ISO creation    |
+| `git`          | 2+      | Version control |
 
 Keep in mind that you do not need to check every version unless you have issues
-building. The only required is Clang which needs to be version 18+ because of
-C23 support.
+building. Only Clang must meet the version requirement because of C23 support.
 
-### Getting the source
+### Getting the Source
 
 ```sh
 git clone https://codeberg.org/zerodev/zeronix.git
@@ -37,7 +38,7 @@ git submodule update --init
 ### Building the ISO
 
 ```sh
-gmake
+make
 ```
 
 ## Running
@@ -46,12 +47,12 @@ This section covers running Zeronix
 
 ### QEMU
 
-Before running in QEMU make sure both `curl` and `qemu-system-x86` is installed.
+Before running in QEMU make sure both `curl` and `qemu-system-x86` are installed.
 
 You can run Zeronix in QEMU by running:
 
 ```sh
-gmake run
+make run
 ```
 
 ### Real Hardware
@@ -68,8 +69,8 @@ The hardware which is being tested on is the following:
 
 ## Configuring
 
-You can configure the build using Kconfig. Keep in mind you will need to have `kconfig-frontends`
-installed.
+You can configure the build using Kconfig. Keep in mind you will need to
+have `kconfig-frontends` installed.
 
 You can launch the configuration menu by running:
 
@@ -90,7 +91,7 @@ make bear
 ```
 
 After that you will need to restart you LSP. In Visual Studio Code press
-`CRTL + SHIFT + P` and run `clangd: Restart language server`.
+`Ctrl + Shift + P` and run `clangd: Restart language server`.
 
 [Balena Etcher]: https://etcher.balena.io/
 [Rufus]: https://rufus.ie/en/
@@ -99,4 +100,4 @@ After that you will need to restart you LSP. In Visual Studio Code press
 
 Zeronix is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
 
-Copyright &copy; 2024-present Viktor Popp and Contributers.
+Copyright &copy; 2024-present Viktor Popp and Contributors.
