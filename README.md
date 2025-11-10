@@ -31,7 +31,7 @@ building. Only Clang must meet the version requirement because of C23 support.
 ### Getting the Source
 
 ```sh
-git clone https://codeberg.org/zerodev/zeronix.git
+git clone https://github.com/projectzerodev/zeronix.git
 cd zeronix
 git submodule update --init
 ```
