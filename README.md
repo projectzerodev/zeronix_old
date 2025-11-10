@@ -1,7 +1,8 @@
 # Zeronix
 
 >[!Caution]
->Zeronix is in early development. Many components are incomplete, experimental, or not yet implemented.
+>Zeronix is in early development. Many components are incomplete, experimental,
+>or not yet implemented.
 
 Zeronix is a minimal operating system designed to serve as a foundation for
 other distributions rather than as a standalone system. It provides only the
