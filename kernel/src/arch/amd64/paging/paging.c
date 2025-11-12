@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <string.h>
 
+uint64_t *global_kernel_pml4;
+
 void _map(uint64_t *pml4, uint64_t physical, uint64_t virtual, uint64_t flags);
 uint64_t *_get_or_create_pmlt(uint64_t *pmlt, uint64_t pmlt_index, uint64_t flags);
 
@@ -58,6 +60,10 @@ void amd64_paging_init(volatile struct limine_memmap_request *memmap_request)
         amd64_paging_map_region(kernel_pml4, e->base, (uint64_t)HIGHER_HALF(e->base), e->length,
                                 PMLE_PRESENT | PMLE_WRITE);
     }
+
+    log_debug("Zeronix PML4 sits at: %llp", kernel_pml4);
+    global_kernel_pml4 = (uint64_t *)PHYSICAL(kernel_pml4);
+    load_pml4(global_kernel_pml4);
 }
 
 void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_start,
