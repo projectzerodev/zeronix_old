@@ -20,11 +20,34 @@ void amd64_paging_init()
     log_debug("__limine_requests: 0x%p -> 0x%p", &__limine_requests_start, &__limine_requests_end);
     log_debug("__kernel_end:\t 0x%p", &__kernel_end);
 
-    uint64_t kernel_text_length = (uint64_t)&__kernel_text_end - (uint64_t)&__kernel_text_start;
     log_debug("Mapping kernel section: .text");
+    uint64_t kernel_text_length = (uint64_t)&__kernel_text_end - (uint64_t)&__kernel_text_start;
     amd64_paging_map_region(kernel_pml4, (uint64_t)&__kernel_text_start - VIRT_BASE + PHYS_BASE,
                             (uint64_t)&__kernel_text_start, kernel_text_length,
                             PMLE_PRESENT | PMLE_WRITE);
+
+    log_debug("Mapping kernel section: .rodata");
+    uint64_t kernel_rodata_length =
+        (uint64_t)&__kernel_rodata_end - (uint64_t)&__kernel_rodata_start;
+    amd64_paging_map_region(kernel_pml4, (uint64_t)&__kernel_rodata_start - VIRT_BASE + PHYS_BASE,
+                            (uint64_t)&__kernel_rodata_start, kernel_rodata_length,
+                            PMLE_PRESENT | PMLE_NOT_EXECUTABLE);
+
+    log_debug("Mapping kernel section: .data (and misc)");
+    uint64_t kernel_data_length  = (uint64_t)&__kernel_data_end - (uint64_t)&__kernel_data_start;
+    uint64_t kernel_other_length = (uint64_t)&__kernel_end - (uint64_t)&__kernel_data_end;
+    amd64_paging_map_region(kernel_pml4, (uint64_t)&__kernel_data_start - VIRT_BASE + PHYS_BASE,
+                            (uint64_t)&__kernel_data_start,
+                            kernel_data_length + kernel_other_length,
+                            PMLE_PRESENT | PMLE_WRITE | PMLE_NOT_EXECUTABLE);
+
+    log_debug("Mapping Limine requests");
+    uint64_t limine_requests_length =
+        (uint64_t)&__limine_requests_end - (uint64_t)&__limine_requests_end;
+    amd64_paging_map_region(kernel_pml4, (uint64_t)&__limine_requests_start - VIRT_BASE + PHYS_BASE,
+                            (uint64_t)&__limine_requests_start,
+                            kernel_data_length + limine_requests_length,
+                            PMLE_PRESENT | PMLE_WRITE | PMLE_NOT_EXECUTABLE);
 }
 
 void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_start,
@@ -37,7 +60,6 @@ void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_
     uint64_t pages = ROUND_UP(length, PAGE_SIZE) / PAGE_SIZE;
     for (uint64_t p = 0; p < pages; p++)
     {
-        log_warn("%i", p);
         uint64_t phys = phys_start + (p * PAGE_SIZE);
         uint64_t virt = virt_start + (p * PAGE_SIZE);
         _map(pml4, phys, virt, flags);

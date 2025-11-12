@@ -1,1 +1,9 @@
 mainmenu "Zeronix Kernel"
+
+menu "Debugging"
+
+config PAGING_DEBUG
+    bool "Enable Paging Debugging"
+    default n
+
+endmenu # Debugging
