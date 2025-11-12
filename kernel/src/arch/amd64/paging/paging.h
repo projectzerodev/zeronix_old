@@ -19,6 +19,10 @@
 #define PML2_INDEX(a) ((a >> 21) & PMLT_MASK)
 #define PML1_INDEX(a) ((a >> 12) & PMLT_MASK)
 
+#define PAGE_ADDR_MASK   0xfffffffff000
+#define PAGE_FLAGS(a)    ((a) & ~(PAGE_ADDR_MASK))
+#define PAGE_GET_ADDR(a) ((a) & PAGE_ADDR_MASK)
+
 extern uint64_t get_pml4();
 
 void amd64_paging_init();

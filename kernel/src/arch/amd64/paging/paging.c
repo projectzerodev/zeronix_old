@@ -5,7 +5,8 @@
 #include "util/log.h"
 #include <stdint.h>
 
-void _map(uint64_t *åml4, uint64_t physical, uint64_t virtual, uint64_t flags);
+void _map(uint64_t *pml4, uint64_t physical, uint64_t virtual, uint64_t flags);
+uint64_t *_get_or_create_pmlt(uint64_t *pmlt, uint64_t pmlt_index, uint64_t flags);
 
 void amd64_paging_init()
 {
@@ -36,6 +37,7 @@ void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_
     uint64_t pages = ROUND_UP(length, PAGE_SIZE) / PAGE_SIZE;
     for (uint64_t p = 0; p < pages; p++)
     {
+        log_warn("%i", p);
         uint64_t phys = phys_start + (p * PAGE_SIZE);
         uint64_t virt = virt_start + (p * PAGE_SIZE);
         _map(pml4, phys, virt, flags);
@@ -48,4 +50,34 @@ void _map(uint64_t *pml4, uint64_t physical, uint64_t virtual, uint64_t flags)
     uint64_t pml3_idx = PML3_INDEX(virtual);
     uint64_t pml2_idx = PML2_INDEX(virtual);
     uint64_t pml1_idx = PML1_INDEX(virtual);
+
+    uint64_t *pml3 = _get_or_create_pmlt(pml4, pml4_idx, 0b111);
+    uint64_t *pml2 = _get_or_create_pmlt(pml3, pml3_idx, 0b111);
+    uint64_t *pml1 = _get_or_create_pmlt(pml2, pml2_idx, 0b111);
+
+    pml1[pml1_idx] = PAGE_GET_ADDR(physical) | flags;
+    __asm__ volatile("invlpg (%0)" : : "r"(virtual) : "memory");
+
+    log_debug("Mapped phys 0x%llx -> virt 0x%llx (pml1[%llx] = 0x%llx)", physical, virtual,
+              pml1_idx, pml1[pml1_idx]);
+}
+
+uint64_t *_get_or_create_pmlt(uint64_t *pmlt, uint64_t pmlt_index, uint64_t flags)
+{
+    if (!(pmlt[pmlt_index] & PMLE_PRESENT))
+    {
+        log_debug("Table 0x%llp entry 0x%llx is not present, creating it...", pmlt, pmlt_index);
+        pmlt[pmlt_index] = (uint64_t)palloc(1, 0) | flags;
+    }
+    else
+    {
+        log_debug("Table 0x%llp entry 0x%llx contents: 0x%llx flags: 0x%llx", pmlt, pmlt_index,
+                  pmlt[pmlt_index], flags);
+    }
+    uint64_t page_addr = PAGE_GET_ADDR(pmlt[pmlt_index]);
+    if (!page_addr)
+    {
+        log_warn("Page entry address is NULL\n");
+    }
+    return (uint64_t *)(HIGHER_HALF(page_addr));
 }
