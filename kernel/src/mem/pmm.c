@@ -133,7 +133,7 @@ void *palloc(size_t n, bool higher_half)
                         void *addr = (void *)(uintptr_t)(first_page * PAGE_SIZE);
                         spinlock_release(&pmm_lock);
 
-                        // Added HHDM support (minimal change)
+                        log_debug("Allocated frame at 0x%p", addr);
                         return higher_half ? (void *)((uint64_t)addr + HHDM_OFFSET) : addr;
                     }
                 }
