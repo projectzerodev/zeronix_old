@@ -1,14 +1,16 @@
 #include "paging.h"
+#include "gen/autoconf.h"
 #include "lib/align.h"
 #include "mem/mmutil.h"
 #include "mem/pmm.h"
 #include "util/log.h"
 #include <stdint.h>
+#include <string.h>
 
 void _map(uint64_t *pml4, uint64_t physical, uint64_t virtual, uint64_t flags);
 uint64_t *_get_or_create_pmlt(uint64_t *pmlt, uint64_t pmlt_index, uint64_t flags);
 
-void amd64_paging_init()
+void amd64_paging_init(volatile struct limine_memmap_request *memmap_request)
 {
     uint64_t *kernel_pml4 = palloc(1, true);
     log_debug("Limine's PML4 sits at: 0x%llp", get_pml4());
@@ -48,14 +50,23 @@ void amd64_paging_init()
                             (uint64_t)&__limine_requests_start,
                             kernel_data_length + limine_requests_length,
                             PMLE_PRESENT | PMLE_WRITE | PMLE_NOT_EXECUTABLE);
+
+    log_debug("Mapping the Higher Half");
+    for (uint64_t i = 0; i < memmap_request->response->entry_count; i++)
+    {
+        struct limine_memmap_entry *e = memmap_request->response->entries[i];
+        amd64_paging_map_region(kernel_pml4, e->base, (uint64_t)HIGHER_HALF(e->base), e->length,
+                                PMLE_PRESENT | PMLE_WRITE);
+    }
 }
 
 void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_start,
                              uint64_t length, uint64_t flags)
 {
-
+#ifdef PAGING_DEBUG
     log_debug("Mapping address range 0x%llx-0x%llx to 0x%llx-0x%llx", phys_start,
               phys_start + length, virt_start, virt_start + length);
+#endif // PAGING_DEBUG
 
     uint64_t pages = ROUND_UP(length, PAGE_SIZE) / PAGE_SIZE;
     for (uint64_t p = 0; p < pages; p++)
@@ -80,26 +91,39 @@ void _map(uint64_t *pml4, uint64_t physical, uint64_t virtual, uint64_t flags)
     pml1[pml1_idx] = PAGE_GET_ADDR(physical) | flags;
     __asm__ volatile("invlpg (%0)" : : "r"(virtual) : "memory");
 
+#ifdef PAGING_DEBUG
     log_debug("Mapped phys 0x%llx -> virt 0x%llx (pml1[%llx] = 0x%llx)", physical, virtual,
               pml1_idx, pml1[pml1_idx]);
+#endif // PAGING_DEBUG
 }
 
 uint64_t *_get_or_create_pmlt(uint64_t *pmlt, uint64_t pmlt_index, uint64_t flags)
 {
+    bool newly_created = false;
     if (!(pmlt[pmlt_index] & PMLE_PRESENT))
     {
+#ifdef PAGING_DEBUG
         log_debug("Table 0x%llp entry 0x%llx is not present, creating it...", pmlt, pmlt_index);
+#endif // PAGING_DEBUG
         pmlt[pmlt_index] = (uint64_t)palloc(1, 0) | flags;
+        newly_created    = true;
     }
     else
     {
+#ifdef PAGING_DEBUG
         log_debug("Table 0x%llp entry 0x%llx contents: 0x%llx flags: 0x%llx", pmlt, pmlt_index,
                   pmlt[pmlt_index], flags);
+#endif // PAGING_DEBUG
     }
     uint64_t page_addr = PAGE_GET_ADDR(pmlt[pmlt_index]);
     if (!page_addr)
     {
         log_warn("Page entry address is NULL\n");
     }
-    return (uint64_t *)(HIGHER_HALF(page_addr));
+    uint64_t *table_vaddr = (uint64_t *)(HIGHER_HALF(page_addr));
+    if (newly_created)
+    {
+        memset(table_vaddr, 0, PAGE_SIZE);
+    }
+    return table_vaddr;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "limine.h"
 #include <stdint.h>
 
 // PMLE Flags
@@ -25,6 +26,6 @@
 
 extern uint64_t get_pml4();
 
-void amd64_paging_init();
+void amd64_paging_init(volatile struct limine_memmap_request *memmap_request);
 void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_start,
                              uint64_t length, uint64_t flags);

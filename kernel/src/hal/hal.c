@@ -35,6 +35,6 @@ void hal_base_init()
     amd64_pic_init();
     amd64_pit_init();
     pmm_init(&memmap_request, &hhdm_request);
-    amd64_paging_init();
+    amd64_paging_init(&memmap_request);
     enable_interrupts();
 }
