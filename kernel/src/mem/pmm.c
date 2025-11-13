@@ -49,7 +49,9 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
             {
                 high = top;
             }
+#ifdef PMM_DEBUG
             log_debug("Usable memory region: 0x%.16llx -> 0x%.16llx", e->base, top);
+#endif // PMM_DEBUG
         }
     }
 

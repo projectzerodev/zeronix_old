@@ -30,3 +30,4 @@ extern uint64_t load_pml4(uint64_t *pml4);
 void amd64_paging_init(volatile struct limine_memmap_request *memmap_request);
 void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_start,
                              uint64_t length, uint64_t flags);
+void amd64_paging_unmap_region(uint64_t *pml4, uint64_t virt_start, uint64_t length);
