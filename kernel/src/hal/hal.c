@@ -11,6 +11,7 @@
 #include "limine.h"
 #include "mem/pmm.h"
 #include "util/kprintf.h"
+#include "drivers/ps2/keyboard/keyboard.h"
 #include <stddef.h>
 
 void hal_early_init()
@@ -34,5 +35,6 @@ void hal_base_init()
     amd64_pic_init();
     amd64_pit_init();
     pmm_init(&memmap_request, &hhdm_request);
+    ps2_keyboard_init();
     enable_interrupts();
 }
