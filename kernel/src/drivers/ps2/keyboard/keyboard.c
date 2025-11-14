@@ -7,7 +7,7 @@
 
 #define PS2_DATA_PORT 0x60
 
-static void ps2_keyboard_irq_handler(void *ctx);
+static void ps2_keyboard_irq_handler(void *context);
 
 void ps2_keyboard_init()
 {
@@ -16,9 +16,10 @@ void ps2_keyboard_init()
     log_debug("Initialized PS/2 Keyboard");
 }
 
-static void ps2_keyboard_irq_handler(void *ctx)
+static void ps2_keyboard_irq_handler(void *context)
 {
+    (void)context;
     uint8_t sc = x86_inb(PS2_DATA_PORT);
-    log_warn("Keypress Scancode: 0x%x", sc);
+    log_warn("Unhandled PS/2 interrupt with scancode: 0x%x", sc);
     amd64_pic_send_eoi(1);
 }
