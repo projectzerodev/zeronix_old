@@ -18,7 +18,7 @@ typedef struct vmm_object_t
 
 typedef struct
 {
-    uint64_t *pml4;
+    uint64_t *pml4; // Physical address
     vmm_object_t *root;
 } vmm_context_t;
 

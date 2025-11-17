@@ -1,16 +1,30 @@
 #include "vmm.h"
 #include "arch/amd64/paging/paging.h"
 #include "lib/align.h"
+#include "mem/mmutil.h"
 #include "mem/pmm.h"
 #include "util/log.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
 
+vmm_context_t *current_context;
+
 vmm_context_t *kernel_vmm_context;
+extern uint64_t *global_kernel_pml4;
 
 static vmm_node_t *vmm_context_list = NULL;
 static vmm_node_t *vmm_object_list  = NULL;
+
+void vmm_set_current_context(vmm_context_t *new)
+{
+    current_context = new;
+}
+
+vmm_context_t *vmm_get_current_context()
+{
+    return current_context;
+}
 
 void *vmm_list_node_alloc(size_t size)
 {
@@ -94,6 +108,24 @@ vmm_object_t *vmm_object_init(uint64_t base, size_t length, uint64_t flags)
     return object;
 }
 
+/**
+ * @param pagemap physical address of non-kernel pml4
+ */
+void copy_kernel_pagemap_to(uint64_t *pagemap)
+{
+    uint64_t *kernel_pml4 = (uint64_t *)HIGHER_HALF(global_kernel_pml4);
+
+    if ((uint64_t *)HIGHER_HALF(pagemap) == kernel_pml4)
+    {
+        return;
+    }
+
+    for (int i = 255; i < 512; i++)
+    {
+        ((uint64_t *)HIGHER_HALF(pagemap))[i] = kernel_pml4[i];
+    }
+}
+
 vmm_context_t *vmm_context_init(uint64_t *pml4, uint64_t flags)
 {
     vmm_context_t *context = vmm_context_alloc();
@@ -101,11 +133,14 @@ vmm_context_t *vmm_context_init(uint64_t *pml4, uint64_t flags)
     context->pml4 = pml4;
     context->root = vmm_object_init(0x1000, 1, flags);
 
+    copy_kernel_pagemap_to(context->pml4);
+
     return context;
 }
 
 void vmm_init()
 {
     kernel_vmm_context = vmm_context_init((uint64_t *)get_pml4(), VMO_PRESENT | VMO_RW);
+    vmm_set_current_context(kernel_vmm_context);
     log_debug("Initialized VMM");
 }
