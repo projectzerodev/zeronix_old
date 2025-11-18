@@ -4,7 +4,7 @@ include tools/utils.mk
 
 $(call USER_VARIABLE, KARCH, x86_64)
 $(call USER_VARIABLE, QEMUFLAGS, -m 128M -M smm=off -serial stdio -d int -D qemu.log -no-reboot -no-shutdown)
-$(call USER_VARIABLE, TEST_QEMUFLAGS, -m 128M -M smm=off -d int -D qemu.log -no-reboot -no-shutdown)
+$(call USER_VARIABLE, TEST_QEMUFLAGS, -m 128M -M smm=off -d int -D qemu.log -no-reboot)
 
 override OUTPUT := zeronix.iso
 
@@ -55,7 +55,8 @@ test: disk
 		-cdrom $(OUTPUT) \
 		-nographic \
 		$(TEST_QEMUFLAGS) \
-		-device isa-debug-exit,iobase=0xf4,iosize=0x04
+		-device isa-debug-exit,iobase=0xf4,iosize=0x04 \
+		|| [ $$? -eq 33 ]
 
 menuconfig:
 	kconfig-mconf Kconfig
