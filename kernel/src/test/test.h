@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 
+#ifdef UNIT_TEST_ENABLED
+
 #define TEST_SECTION __attribute__((section(".testcases"), used))
 
 typedef struct
@@ -31,3 +33,11 @@ typedef struct
     static void __test_func_##NAME(test_result_t *result) BODY
 
 void test_run_all();
+
+#else /* UNIT_TEST_ENABLED is not defined */
+
+#define TEST(GROUP, NAME, BODY)
+
+#define test_run_all(...)
+
+#endif /* UNIT_TEST_ENABLED */

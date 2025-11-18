@@ -4,6 +4,7 @@ include tools/utils.mk
 
 $(call USER_VARIABLE, KARCH, x86_64)
 $(call USER_VARIABLE, QEMUFLAGS, -m 128M -M smm=off -serial stdio -d int -D qemu.log -no-reboot -no-shutdown)
+$(call USER_VARIABLE, TEST_QEMUFLAGS, -m 128M -M smm=off -d int -D qemu.log -no-reboot -no-shutdown)
 
 override OUTPUT := zeronix.iso
 
@@ -17,7 +18,7 @@ override XORRISO_FLAGS += \
 all: disk
 
 kernel:
-	$(MAKE) -C kernel
+	$(MAKE) -C kernel $(KERNEL_TARGET)
 
 bootloader:
 	$(MAKE) -C limine
@@ -44,6 +45,16 @@ run: ovmf disk
 		-drive if=pflash,unit=1,format=raw,file=ovmf/ovmf-vars-$(KARCH).fd \
 		-cdrom $(OUTPUT) \
 		$(QEMUFLAGS)
+
+test: KERNEL_TARGET=test
+test: disk
+	qemu-system-$(KARCH) \
+		-M q35 \
+		-drive if=pflash,unit=0,format=raw,file=ovmf/ovmf-code-$(KARCH).fd,readonly=on \
+		-drive if=pflash,unit=1,format=raw,file=ovmf/ovmf-vars-$(KARCH).fd \
+		-cdrom $(OUTPUT) \
+		-nographic \
+		$(TEST_QEMUFLAGS)
 
 menuconfig:
 	kconfig-mconf Kconfig

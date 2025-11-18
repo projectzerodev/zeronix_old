@@ -62,6 +62,9 @@ override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
 
 all: bin/$(OUTPUT)
 
+test: override KCPPFLAGS += -DUNIT_TEST_ENABLED
+test: clean bin/$(OUTPUT)
+
 bin/$(OUTPUT): linker.lds $(OBJ)
 	mkdir -p "$$(dirname $@)"
 	$(KLD) $(OBJ) $(KLDFLAGS) -o $@

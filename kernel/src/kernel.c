@@ -1,9 +1,7 @@
 #include "hal/cpu.h"
 #include "hal/hal.h"
-#include "util/log.h"
-#ifdef UNIT_TEST_ENABLED
 #include "test/test.h"
-#endif
+#include "util/log.h"
 
 void kstart()
 {
@@ -12,9 +10,9 @@ void kstart()
 
     log_info("Welcome to Zeronix!");
 
-#ifdef UNIT_TEST_ENABLED
     test_run_all();
-#endif
 
     halt_loop();
 }
+
+TEST(SampleTests, Sample, { log_test("AAA"); })

@@ -55,6 +55,12 @@ SECTIONS
         *(COMMON)
     } :data
 
+    .testcases : {
+        __start_testcases = .;
+        KEEP(*(.testcases))
+        __end_testcases = .;
+    }
+
     /DISCARD/ : {
         *(.eh_frame*)
         *(.note .note.*)
