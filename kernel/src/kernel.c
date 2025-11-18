@@ -15,4 +15,4 @@ void kstart()
     halt_loop();
 }
 
-TEST(sample_tests, sample, {})
+TEST(sample_tests, sample, { result->failed = false; })

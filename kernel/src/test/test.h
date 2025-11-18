@@ -37,6 +37,9 @@ void test_run_all();
 
 #define TEST(GROUP, NAME, BODY)
 
-#define test_run_all(...)
+#define test_run_all(...)                                                                          \
+    do                                                                                             \
+    {                                                                                              \
+    } while (0)
 
 #endif /* UNIT_TEST_ENABLED */

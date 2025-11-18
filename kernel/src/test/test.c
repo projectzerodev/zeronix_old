@@ -16,15 +16,15 @@ void test_run_single(test_result_t *result, const test_case_t *tc)
     result->failed = false;
     result->reason = NULL;
 
-    kprintf("%s:%s ... ", tc->group, tc->name);
+    kprintf("%s:%s ...", tc->group, tc->name);
     tc->func(result);
-    kprintf(" %s\n", result->failed ? "FAILED" : "ok");
+    kprintf(" %s\n", result->failed ? "\033[31mFAILED\033[0m" : "\033[32mok\033[0m");
 }
 
 void test_run_all()
 {
     uint32_t total = (uint32_t)(__end_testcases - __start_testcases);
-    kprintf("running %u %s\n", total, total > 1 ? "tests" : "test");
+    kprintf("\nrunning %u %s\n", total, total > 1 ? "tests" : "test");
 
     uint32_t failed = 0;
 
@@ -40,8 +40,8 @@ void test_run_all()
         }
     }
 
-    kprintf("test result: %s. %u passed; %u failed", failed ? "FAILED" : "ok", total - failed,
-            failed);
+    kprintf("\ntest result: %s. %u passed; %u failed\n",
+            failed ? "\033[31mFAILED\033[0m" : "\033[32mok\033[0m", total - failed, failed);
 }
 
 #endif
