@@ -17,8 +17,6 @@
     kprintf(LOG_COLOR_WARN " warn @ %s(): " LOG_COLOR_RESET fmt "\n", __func__, ##__VA_ARGS__)
 #define log_error(fmt, ...)                                                                        \
     kprintf(LOG_COLOR_ERROR "error @ %s(): " LOG_COLOR_RESET fmt "\n", __func__, ##__VA_ARGS__)
-#define log_test(fmt, ...)                                                                         \
-    kprintf(LOG_COLOR_TEST "test @ %s(): " LOG_COLOR_RESET fmt "\n", __func__, ##__VA_ARGS__)
 #else
 #define log_debug(fmt, ...)                                                                        \
     kprintf(LOG_COLOR_DEBUG "DEBUG " LOG_COLOR_RESET fmt "\n", ##__VA_ARGS__)
