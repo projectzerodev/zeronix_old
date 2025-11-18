@@ -54,7 +54,8 @@ test: disk
 		-drive if=pflash,unit=1,format=raw,file=ovmf/ovmf-vars-$(KARCH).fd \
 		-cdrom $(OUTPUT) \
 		-nographic \
-		$(TEST_QEMUFLAGS)
+		$(TEST_QEMUFLAGS) \
+		-device isa-debug-exit,iobase=0xf4,iosize=0x04
 
 menuconfig:
 	kconfig-mconf Kconfig

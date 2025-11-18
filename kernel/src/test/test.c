@@ -1,8 +1,8 @@
 #include "test.h"
 #include "util/kprintf.h"
+#include "util/qemu.h"
 
 #ifdef UNIT_TEST_ENABLED
-#include "util/log.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -42,6 +42,10 @@ void test_run_all()
 
     kprintf("\ntest result: %s. %u passed; %u failed\n",
             failed ? "\033[31mFAILED\033[0m" : "\033[32mok\033[0m", total - failed, failed);
+
+    qemu_exit(failed ? QEMU_EXIT_FAILURE : QEMU_EXIT_SUCCESS);
+
+    kprintf("Hey!");
 }
 
 #endif
