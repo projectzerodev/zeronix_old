@@ -1,3 +1,0 @@
-{
-  "clangd.arguments": ["-DUNIT_TEST_ENABLED"]
-}

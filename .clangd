@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-DUNIT_TEST_ENABLED]

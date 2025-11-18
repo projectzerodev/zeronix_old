@@ -10,7 +10,6 @@ typedef struct
     const char *name;
     const char *group;
     bool failed;
-    bool skipped;
 
     const char *reason;
     const char *file;

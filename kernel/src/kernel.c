@@ -15,4 +15,4 @@ void kstart()
     halt_loop();
 }
 
-TEST(SampleTests, Sample, { log_test("AAA"); })
+TEST(sample_tests, sample, {})

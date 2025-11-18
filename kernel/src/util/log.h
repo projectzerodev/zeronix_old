@@ -6,7 +6,6 @@
 #define LOG_COLOR_INFO  "\033[92m"
 #define LOG_COLOR_WARN  "\033[93m"
 #define LOG_COLOR_ERROR "\033[91m"
-#define LOG_COLOR_TEST  "\033[95m"
 #define LOG_COLOR_RESET "\033[0m"
 
 #ifdef VERBOSE_LOGGING
@@ -27,5 +26,4 @@
 #define log_warn(fmt, ...) kprintf(LOG_COLOR_WARN "WARN  " LOG_COLOR_RESET fmt "\n", ##__VA_ARGS__)
 #define log_error(fmt, ...)                                                                        \
     kprintf(LOG_COLOR_ERROR "ERROR " LOG_COLOR_RESET fmt "\n", ##__VA_ARGS__)
-#define log_test(fmt, ...) kprintf(LOG_COLOR_TEST "TEST  " LOG_COLOR_RESET fmt "\n", ##__VA_ARGS__)
 #endif /* VERBOSE_LOGGING */
