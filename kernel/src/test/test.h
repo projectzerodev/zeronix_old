@@ -33,6 +33,21 @@ typedef struct
 
 void test_run_all();
 
+#define ASSERT_TRUE(expr)                                                                          \
+    do                                                                                             \
+    {                                                                                              \
+        if (!(expr))                                                                               \
+        {                                                                                          \
+            (result)->failed = true;                                                               \
+            (result)->file   = __FILE__;                                                           \
+            (result)->line   = __LINE__;                                                           \
+            return;                                                                                \
+        }                                                                                          \
+    } while (0)
+
+#define ASSERT_EQ(a, b) ASSERT_TRUE(((a) == (b)))
+#define ASSERT_NE(a, b) ASSERT_TRUE(((a) != (b)))
+
 #else /* UNIT_TEST_ENABLED is not defined */
 
 #define TEST(GROUP, NAME, BODY)
