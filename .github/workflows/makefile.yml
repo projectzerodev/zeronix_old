@@ -18,7 +18,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang nasm make xorriso git
+          sudo apt-get install -y clang nasm make xorriso git curl qemu-system-x86
 
       - name: Generate Configuration
         run: ./tools/kconfig.sh
