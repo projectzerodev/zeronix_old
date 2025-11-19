@@ -21,4 +21,4 @@ jobs:
           sudo apt-get install -y clang nasm make xorriso git
 
       - name: Test Kernel
-        uses: make test
+        run: make test
