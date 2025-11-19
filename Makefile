@@ -47,7 +47,7 @@ run: ovmf disk
 		$(QEMUFLAGS)
 
 test: KERNEL_TARGET=test
-test: disk
+test: ovmf disk
 	qemu-system-$(KARCH) \
 		-M q35 \
 		-drive if=pflash,unit=0,format=raw,file=ovmf/ovmf-code-$(KARCH).fd,readonly=on \
