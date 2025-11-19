@@ -20,5 +20,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang nasm make xorriso git
 
+      - name: Generate Configuration
+        run: ./tools/kconfig.sh
+
       - name: Test Kernel
         run: make test
