@@ -58,9 +58,12 @@ test: ovmf disk
 		-device isa-debug-exit,iobase=0xf4,iosize=0x04 \
 		|| [ $$? -eq 33 ]
 
+config:
+	./tools/kconfig.sh
+
 menuconfig:
 	kconfig-mconf Kconfig
-	./tools/kconfig.sh
+	$(MAKE) config
 
 bear: clean
 	bear -- make

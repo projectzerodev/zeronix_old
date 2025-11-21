@@ -21,7 +21,7 @@ jobs:
           sudo apt-get install -y clang nasm make xorriso git curl qemu-system-x86
 
       - name: Generate Configuration
-        run: ./tools/kconfig.sh
+        run: make config
 
       - name: Test Kernel
         run: make test
