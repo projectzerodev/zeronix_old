@@ -86,3 +86,6 @@ obj/%.asm.o: src/%.asm
 
 clean:
 	rm -rf bin/ obj/
+
+distclean:
+	rm -rf libs/ src/gen/autoconf.h

@@ -58,12 +58,13 @@ test: ovmf disk
 		-device isa-debug-exit,iobase=0xf4,iosize=0x04 \
 		|| [ $$? -eq 33 ]
 
-config:
+defconfig:
+	cp ./kernel/cfgs/$(KARCH)/default_config .config
 	./tools/kconfig.sh
 
 menuconfig:
 	kconfig-mconf Kconfig
-	$(MAKE) config
+	./tools/kconfig.sh
 
 bear: clean
 	bear -- make
@@ -75,7 +76,8 @@ clean:
 	rm -rf $(OUTPUT) qemu.log
 
 distclean: clean
-	rm -rf limine/ compile_commands.json ovmf/
+	$(MAKE) -C kernel distclean
+	rm -rf limine/ compile_commands.json ovmf/ .config
 
 ovmf/ovmf-code-$(KARCH).fd:
 	mkdir -p ovmf

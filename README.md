@@ -36,6 +36,12 @@ cd zeronix
 git submodule update --init
 ```
 
+### Generating a Configuration
+
+```sh
+make defconfig
+```
+
 ### Building the ISO
 
 ```sh
