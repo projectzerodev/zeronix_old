@@ -13,6 +13,7 @@
 #include "mem/pmm.h"
 #include "mem/vmm.h"
 #include "util/kprintf.h"
+#include "drivers/ps2/keyboard/keyboard.h"
 #include <stddef.h>
 
 void hal_early_init()
@@ -38,5 +39,6 @@ void hal_base_init()
     pmm_init(&memmap_request, &hhdm_request);
     amd64_paging_init(&memmap_request);
     vmm_init();
+    ps2_keyboard_init();
     enable_interrupts();
 }
