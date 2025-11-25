@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "makefile.launchConfigurations": [
+    {
+      "cwd": "/home/viktorpopp/zeronix",
+      "binaryPath": "/home/viktorpopp/zeronix/limine/limine",
+      "binaryArgs": ["bios-install", "zeronix.iso"]
+    }
+  ]
+}
