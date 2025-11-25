@@ -5,6 +5,9 @@
 
 #define TEST_SECTION __attribute__((section(".testcases"), used))
 
+/**
+ * @brief Representing a test result
+ */
 typedef struct
 {
     const char *name;
@@ -16,8 +19,14 @@ typedef struct
     uint32_t line;
 } test_result_t;
 
+/**
+ * @brief Representing a test function
+ */
 typedef void (*test_func_t)(test_result_t *result);
 
+/**
+ * @brief Representing a test case.
+ */
 typedef struct
 {
     const char *name;
@@ -25,13 +34,21 @@ typedef struct
     test_func_t func;
 } test_case_t;
 
+/**
+ * @brief Macro for easily defining a test case.
+ */
 #define TEST(GROUP, NAME, BODY)                                                                    \
     static void __test_func_##NAME(test_result_t *result);                                         \
     static const test_case_t __test_case_##NAME TEST_SECTION = {                                   \
         .name = #NAME, .group = #GROUP, .func = __test_func_##NAME};                               \
     static void __test_func_##NAME(test_result_t *result) BODY
 
+/**
+ * @brief Runs every test (if `UNIT_TEST_ENABLED` is defined).
+ */
 void test_run_all();
+
+// === Basic Testing Things ===
 
 #define ASSERT_TRUE(expr)                                                                          \
     do                                                                                             \

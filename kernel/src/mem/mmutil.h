@@ -11,7 +11,9 @@ extern uint64_t __limine_requests_start, __limine_requests_end;
 #define VIRT_BASE   address_request.response->virtual_base
 #define PHYS_BASE   address_request.response->physical_base
 
+// Makes sure an addess is in the higher half.
 #define HIGHER_HALF(addr)                                                                          \
     ((void *)((uint64_t)(addr) < HHDM_OFFSET ? (uint64_t)(addr) + HHDM_OFFSET : (uint64_t)(addr)))
+// Translate a address in the higher half to physical.
 #define PHYSICAL(addr)                                                                             \
     ((void *)((uint64_t)(addr) >= HHDM_OFFSET ? (uint64_t)(addr) - HHDM_OFFSET : (uint64_t)(addr)))

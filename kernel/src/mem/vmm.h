@@ -39,5 +39,16 @@ typedef struct vmm_node_t
     struct vmm_node_t *next;
 } vmm_node_t;
 
+/**
+ * @brief Initializes (and allocates) a new VMC.
+ *
+ * @param pml4 The pagemap it will use.
+ * @param flags Flags for the root VMO.
+ * @return Pointer to the new VMC.
+ */
 vmm_context_t *vmm_context_init(uint64_t *pml4, uint64_t flags);
+
+/**
+ * @brief Initializes the Virtual Memory Manager
+ */
 void vmm_init();
