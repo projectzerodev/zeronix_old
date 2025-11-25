@@ -27,7 +27,33 @@
 extern uint64_t get_pml4();
 extern uint64_t load_pml4(uint64_t *pml4);
 
+/**
+ * @brief Initialize paging.
+ *
+ * Creates a pagemap and maps all of the kernel sections to it. Then it maps the higher half and
+ * loads the new pagemap.
+ *
+ * @param memmap_request Pointer to the Limine memory map.
+ */
 void amd64_paging_init(volatile struct limine_memmap_request *memmap_request);
+
+/**
+ * @brief Maps a page.
+ *
+ * @param pml4 The root pagemap.
+ * @param phys_start The physical regions start address.
+ * @param virt_start The virtual regions start address.
+ * @param length The amount of pages to map (size=4 KiB).
+ * @param flags PML Entry flags.
+ */
 void amd64_paging_map_region(uint64_t *pml4, uint64_t phys_start, uint64_t virt_start,
                              uint64_t length, uint64_t flags);
+
+/**
+ * @brief Unmaps a page
+ *
+ * @param pml4 The root pagemap.
+ * @param virt_start The virtual regions start address.
+ * @param length The amount of pages to map (size=4 KiB).
+ */
 void amd64_paging_unmap_region(uint64_t *pml4, uint64_t virt_start, uint64_t length);

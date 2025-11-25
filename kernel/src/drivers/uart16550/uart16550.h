@@ -34,6 +34,24 @@
 #define UART_DIVISOR_LSB 0x01
 #define UART_DIVISOR_MSB 0x00
 
+/**
+ * @brief Initializes the UART16550.
+ *
+ */
 void _uart16550_init();
+
+/**
+ * @brief Sends a single byte to the UART16550.
+ *
+ * @param c The byte to send.
+ */
 void _uart16550_putc(char c);
+
+/**
+ * @brief Sends a buffer to the UART16550.
+ *
+ * @param buf The buffer to send.
+ * @param len The length of the buffer.
+ * @return returns -1 on failure.
+ */
 int _uart16550_write(const char *buf, size_t len);

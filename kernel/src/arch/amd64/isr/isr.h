@@ -3,6 +3,9 @@
 
 extern void *amd64_isr_stub_table[];
 
+/**
+ * @brief Interrupt Stack Frame.
+ */
 typedef struct
 {
     // Pushed by `isr_commom`
@@ -35,7 +38,20 @@ typedef struct
 
 } __attribute__((packed)) amd64_interrupt_frame_t;
 
+/**
+ * @brief Interrupt Service Routine Handler Function
+ */
 typedef void (*amd64_isr_handler_fn)(void *ctx);
 
+/**
+ * @brief Enables all IDT gates/entries.
+ */
 void amd64_isr_init();
+
+/**
+ * @brief Registers an ISR Handler
+ *
+ * @param interrupt The IDT/ISR index to register.
+ * @param handler The function that gets registered.
+ */
 void amd64_isr_register_handler(int interrupt, amd64_isr_handler_fn handler);
