@@ -56,6 +56,14 @@ You can run Zeronix in QEMU by running:
 make run
 ```
 
+For debugging, run
+
+```sh
+make debug
+```
+
+and attach gdb on localhost, port 26000. To debug from VSCode a preset exists in `launch.json`.
+
 ### Real Hardware
 
 You can run Zeronix on real hardware by using [Balena Etcher] to flash the ISO

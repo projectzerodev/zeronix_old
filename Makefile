@@ -4,6 +4,7 @@ include tools/utils.mk
 
 $(call USER_VARIABLE, KARCH, x86_64)
 $(call USER_VARIABLE, QEMUFLAGS, -m 128M -M smm=off -serial stdio -d int -D qemu.log -no-reboot -no-shutdown)
+$(call USER_VARIABLE, QEMU_DEBUG_FLAGS, -S -gdb tcp:localhost:26000)
 
 override OUTPUT := zeronix.iso
 
@@ -44,6 +45,14 @@ run: ovmf disk
 		-drive if=pflash,unit=1,format=raw,file=ovmf/ovmf-vars-$(KARCH).fd \
 		-cdrom $(OUTPUT) \
 		$(QEMUFLAGS)
+
+debug: ovmf disk
+	qemu-system-$(KARCH) \
+		-M q35 \
+		-drive if=pflash,unit=0,format=raw,file=ovmf/ovmf-code-$(KARCH).fd,readonly=on \
+		-drive if=pflash,unit=1,format=raw,file=ovmf/ovmf-vars-$(KARCH).fd \
+		-cdrom $(OUTPUT) \
+		$(QEMUFLAGS) $(QEMU_DEBUG_FLAGS)
 
 menuconfig:
 	kconfig-mconf Kconfig
