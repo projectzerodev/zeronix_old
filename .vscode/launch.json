@@ -1,21 +1,4 @@
 {
   "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Debug Kernel",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/kernel/bin/kernel",
-      "preLaunchTask": "Build Kernel",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
-      "logging": {
-        "engineLogging": true
-      },
-      "MIMode": "gdb"
-    }
-  ]
+  "configurations": []
 }
