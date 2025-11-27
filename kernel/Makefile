@@ -28,8 +28,13 @@ override KCFLAGS += \
 	-mno-sse2 \
 	-fno-omit-frame-pointer \
 	-mno-red-zone \
-	-O3 \
 	-mcmodel=kernel
+
+ifneq ($(filter debug,$(MAKECMDGOALS)),)
+override KCFLAGS += -O0
+else
+override KCFLAGS += -O3
+endif
 
 override KCPPFLAGS += \
 	-I src \
@@ -64,6 +69,8 @@ all: bin/$(OUTPUT)
 
 test: override KCPPFLAGS += -DUNIT_TEST_ENABLED
 test: clean bin/$(OUTPUT)
+
+debug: all
 
 bin/$(OUTPUT): linker.lds $(OBJ)
 	mkdir -p "$$(dirname $@)"

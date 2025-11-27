@@ -57,6 +57,16 @@ test: ovmf disk
 		$(TEST_QEMUFLAGS) \
 		-device isa-debug-exit,iobase=0xf4,iosize=0x04 \
 		|| [ $$? -eq 33 ]
+	
+debug: KERNEL_TARGET=debug
+debug: ovmf disk
+	qemu-system-$(KARCH) \
+		-M q35 \
+		-drive if=pflash,unit=0,format=raw,file=ovmf/ovmf-code-$(KARCH).fd,readonly=on \
+		-drive if=pflash,unit=1,format=raw,file=ovmf/ovmf-vars-$(KARCH).fd \
+		-cdrom $(OUTPUT) \
+		$(QEMUFLAGS) \
+		-s -S
 
 defconfig:
 	cp ./kernel/cfgs/$(KARCH)/default_config .config
