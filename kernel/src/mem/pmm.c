@@ -1,5 +1,4 @@
 #include "pmm.h"
-#include "boot/boot.h"
 #include "hal/cpu.h"
 #include "lib/align.h"
 #include "lib/bitmap.h"
