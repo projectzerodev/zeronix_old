@@ -28,8 +28,13 @@ override KCFLAGS += \
 	-mno-sse2 \
 	-fno-omit-frame-pointer \
 	-mno-red-zone \
-	-O3 \
 	-mcmodel=kernel
+
+ifneq ($(filter debug,$(MAKECMDGOALS)),)
+override KCFLAGS += -O0
+else
+override KCFLAGS += -O3
+endif
 
 override KCPPFLAGS += \
 	-I src \
@@ -62,6 +67,11 @@ override HEADER_DEPS := $(addprefix obj/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d))
 
 all: bin/$(OUTPUT)
 
+test: override KCPPFLAGS += -DUNIT_TEST_ENABLED
+test: clean bin/$(OUTPUT)
+
+debug: all
+
 bin/$(OUTPUT): linker.lds $(OBJ)
 	mkdir -p "$$(dirname $@)"
 	$(KLD) $(OBJ) $(KLDFLAGS) -o $@
@@ -83,3 +93,6 @@ obj/%.asm.o: src/%.asm
 
 clean:
 	rm -rf bin/ obj/
+
+distclean:
+	rm -rf libs/ src/gen/autoconf.h

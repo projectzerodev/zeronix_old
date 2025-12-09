@@ -1,0 +1,27 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: ["nightly", "dev", "beta", "stable"]
+  pull_request:
+    branches: ["nightly", "dev", "beta", "stable"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang nasm make xorriso git curl qemu-system-x86
+
+      - name: Generate Configuration
+        run: make defconfig
+
+      - name: Test Kernel
+        run: make test

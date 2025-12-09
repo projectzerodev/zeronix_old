@@ -3,6 +3,7 @@
 #include "arch/amd64/gdt/gdt.h"
 #include "arch/amd64/idt/idt.h"
 #include "arch/amd64/isr/isr.h"
+#include "arch/amd64/paging/paging.h"
 #include "arch/amd64/pic/pic.h"
 #include "arch/amd64/pit/pit.h"
 #include "boot/boot.h"
@@ -10,6 +11,7 @@
 #include "hal/cpu.h"
 #include "limine.h"
 #include "mem/pmm.h"
+#include "mem/vmm.h"
 #include "util/kprintf.h"
 #include "drivers/ps2/keyboard/keyboard.h"
 #include <stddef.h>
@@ -35,6 +37,8 @@ void hal_base_init()
     amd64_pic_init();
     amd64_pit_init();
     pmm_init(&memmap_request, &hhdm_request);
+    amd64_paging_init(&memmap_request);
+    vmm_init();
     ps2_keyboard_init();
     enable_interrupts();
 }

@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/kernel/bin/kernel",
+      "cwd": "${workspaceFolder}",
+
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Load Kernel ELF Symbols",
+          "text": "symbol-file ${workspaceFolder}/kernel/bin/kernel",
+          "ignoreFailures": false
+        },
+        {
+          "description": "Use Intel syntax",
+          "text": "set disassembly-flavor intel",
+          "ignoreFailures": false
+        },
+        {
+          "description": "Use hexadecimal values",
+          "text": "set output-radix 16",
+          "ignoreFailures": false
+        },
+        {
+          "description": "Remote QEMU target",
+          "text": "target remote localhost:1234",
+          "ignoreFailures": false
+        }
+      ]
+    }
+  ]
+}

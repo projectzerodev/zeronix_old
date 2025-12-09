@@ -1,5 +1,6 @@
 #include "hal/cpu.h"
 #include "hal/hal.h"
+#include "test/test.h"
 #include "util/log.h"
 
 void kstart()
@@ -8,6 +9,8 @@ void kstart()
     hal_base_init();
 
     log_info("Welcome to Zeronix!");
+
+    test_run_all();
 
     halt_loop();
 }

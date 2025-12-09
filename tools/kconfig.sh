@@ -3,6 +3,12 @@
 CONFIG_FILE=".config"
 HEADER_FILE="kernel/src/gen/autoconf.h"
 
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    CONFIG_FILE="tools/defconfig"
+fi
+
+mkdir -p "$(dirname "$HEADER_FILE")"
+
 echo "/* Auto-generated header */" > "$HEADER_FILE"
 
 while IFS= read -r line; do

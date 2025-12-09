@@ -1,5 +1,4 @@
 #include "pmm.h"
-#include "boot/boot.h"
 #include "hal/cpu.h"
 #include "lib/align.h"
 #include "lib/bitmap.h"
@@ -49,7 +48,9 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
             {
                 high = top;
             }
+#ifdef PMM_DEBUG
             log_debug("Usable memory region: 0x%.16llx -> 0x%.16llx", e->base, top);
+#endif // PMM_DEBUG
         }
     }
 
@@ -58,15 +59,16 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
 
     // Find a region for the bitmap itself
     bitmap = NULL;
+
+    uint64_t bitmap_phys_base = 0;
     for (uint64_t i = 0; i < memmap->entry_count; i++)
     {
         struct limine_memmap_entry *e = memmap->entries[i];
         if (e->type == LIMINE_MEMMAP_USABLE && e->length >= bitmap_size)
         {
-            bitmap = (uint8_t *)(e->base + hhdm->offset);
+            bitmap_phys_base = e->base;
+            bitmap           = (uint8_t *)(e->base + hhdm->offset);
             memset(bitmap, 0xFF, bitmap_size);
-            e->base   += bitmap_size;
-            e->length -= bitmap_size;
             break;
         }
     }
@@ -83,11 +85,21 @@ void pmm_init(volatile struct limine_memmap_request *memmap_request,
         struct limine_memmap_entry *e = memmap->entries[i];
         if (e->type == LIMINE_MEMMAP_USABLE)
         {
-            for (uint64_t j = e->base; j < e->base + e->length; j += PAGE_SIZE)
+            uint64_t start = e->base;
+            uint64_t end   = e->base + e->length;
+
+            // Skip pages for the bitmap itself
+            if (e->base == bitmap_phys_base)
             {
-                if ((j / PAGE_SIZE) < bitmap_pages)
+                start += bitmap_size;
+            }
+
+            for (uint64_t j = start; j < end; j += PAGE_SIZE)
+            {
+                uint64_t page_idx = j / PAGE_SIZE;
+                if (page_idx < bitmap_pages)
                 {
-                    bitmap_clear(bitmap, j / PAGE_SIZE);
+                    bitmap_clear(bitmap, page_idx);
                 }
             }
         }
@@ -132,8 +144,9 @@ void *palloc(size_t n, bool higher_half)
 
                         void *addr = (void *)(uintptr_t)(first_page * PAGE_SIZE);
                         spinlock_release(&pmm_lock);
-
-                        // Added HHDM support (minimal change)
+#ifdef PMM_DEBUG
+                        log_debug("Allocated frame at 0x%p", addr);
+#endif // PMM_DEBUG
                         return higher_half ? (void *)((uint64_t)addr + HHDM_OFFSET) : addr;
                     }
                 }
