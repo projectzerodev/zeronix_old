@@ -126,6 +126,16 @@ void copy_kernel_pagemap_to(uint64_t *pagemap)
     }
 }
 
+vmm_object_t *object_split(vmm_object_t *source, size_t where)
+{
+    vmm_object_t *new_object;
+
+    if (source->length - where <= 0)
+    {
+        return source;
+    }
+}
+
 vmm_context_t *vmm_context_init(uint64_t *pml4, uint64_t flags)
 {
     vmm_context_t *context = vmm_context_alloc();
@@ -143,4 +153,39 @@ void vmm_init()
     kernel_vmm_context = vmm_context_init((uint64_t *)get_pml4(), VMO_PRESENT | VMO_RW);
     vmm_set_current_context(kernel_vmm_context);
     log_debug("Initialized VMM");
+}
+
+void *valloc(vmm_context_t *context, size_t pages, uint8_t flags, void *physical)
+{
+    void *pointer = NULL; // The pointer that will get returned
+
+    vmm_object_t *current_object = context->root; // The curernt VMO (for iterating)
+    vmm_object_t *new_object     = NULL;          // A new VMO (if it needs to be created)
+
+    for (; current_object != NULL; current_object = current_object->next)
+    {
+        if (current_object->length >= pages)
+        {
+            break;
+        }
+
+        if (!current_object->next)
+        {
+            new_object = vmm_object_init(current_object->base +
+                                             (uint64_t)(current_object->length * PAGE_SIZE),
+                                         pages, flags);
+
+            current_object->next = new_object;
+        }
+    }
+
+    // Split the VMO
+
+    // If `physical` != void, prepare the offset (how long i goes into the page)
+
+    // Allocate frames
+
+    // Map physica l-> virtual
+
+    // Return pointer + offset
 }

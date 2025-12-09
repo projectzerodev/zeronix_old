@@ -49,6 +49,17 @@ typedef struct vmm_node_t
 vmm_context_t *vmm_context_init(uint64_t *pml4, uint64_t flags);
 
 /**
- * @brief Initializes the Virtual Memory Manager
+ * @brief Initializes the Virtual Memory Manager.
  */
 void vmm_init();
+
+/**
+ * @brief Allocate virtual memory.
+ *
+ * @param context The context where the memory will get allocated.
+ * @param pages The amount of pages that will get allocated.
+ * @param flags Virtual memory range flags.
+ * @param physical Physical address to map to (optional).
+ * @return Address of the virtual memory allocated.
+ */
+void *valloc(vmm_context_t *context, size_t pages, uint8_t flags, void *phys);
